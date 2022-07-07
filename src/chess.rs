@@ -7,8 +7,9 @@
 // 9/10 - queen
 // 11/12 - king
 
+mod crd;
 
-pub struct Chess{
+pub struct Chess {
     board: [[i8; 8]; 8],
 
 }
