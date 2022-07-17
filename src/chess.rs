@@ -2,12 +2,18 @@
 // 0 - empty cell
 // 1/2 - pawn
 // 3/4 - rook
-// 5/6 - horse
+// 5/6 - knight
 // 7/8 - bishop
 // 9/10 - queen
 // 11/12 - king
 
+// player: 
+// 1 - white
+// 2 - black
+
 mod crd;
+mod piece;
+
 
 pub struct Chess {
     board: [[i8; 8]; 8],
