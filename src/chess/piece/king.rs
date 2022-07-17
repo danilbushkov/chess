@@ -1,3 +1,4 @@
+#[derive(Copy, Clone)]
 pub struct King {
     player: i8,
     first_move: bool,

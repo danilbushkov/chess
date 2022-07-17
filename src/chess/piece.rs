@@ -17,7 +17,7 @@ use crate::chess::piece::rook::Rook;
 
 
 
-
+#[derive(Copy, Clone)]
 pub enum Piece {
     Bishop(Bishop),
     King(King),
@@ -30,6 +30,11 @@ pub enum Piece {
 
 
 impl Piece {
+    pub fn create_none() -> Self {
+        Piece::Knight(Knight::create(1))
+    }
+
+
     pub fn moves(&self) -> Vec<Crd> {
         match self {
             _ => vec![],
