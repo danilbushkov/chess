@@ -1,13 +1,16 @@
 
 
 mod chess;
+mod console_game;
 
-use crate::chess::Chess;
+
+use chess::Chess;
+use console_game::ConsoleGame;
 
 fn main() {
-    let mut game: Chess = Chess::new();
-    // game.init_board();
-    // game.print_board();
+    let mut chess = Chess::create();
+    let mut game = ConsoleGame::create(chess);
+    
     game.run();
 
 }

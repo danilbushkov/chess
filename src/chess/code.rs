@@ -1,0 +1,4 @@
+enum Code{
+    Exit,
+    None,
+}

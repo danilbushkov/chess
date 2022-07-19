@@ -16,51 +16,42 @@ mod piece;
 mod state;
 mod board;
 
+
+
 use crate::chess::state::State;
 use crate::chess::board::Board;
+use crate::chess::crd::Crd;
+
+
 
 
 pub struct Chess {
+    player: i8,
     board: Board,
     state: State,
+    moves: Vec<Crd>,
 
 }
 
 impl Chess {
 
-    pub fn new() -> Self{
+    pub fn create() -> Self{
         Self {
+            player: 1,
+            moves: Vec::new(),
             board: Board::create(),
             state: State::SelectPieceState,
         }
     }
 
-    // pub fn init_board(&mut self) {
-    //     self.board = [
-    //         [4, 6, 8,10, 12,8, 6, 4],
-    //         [2, 2, 2, 2, 2, 2, 2, 2],
-    //         [0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0],
-    //         [0, 0, 0, 0, 0, 0, 0, 0],
-    //         [1, 1, 1, 1, 1, 1, 1, 1],
-    //         [3, 5, 7, 9, 11,7, 5, 3],
-    //     ];
-    // }
 
-    // pub fn print_board(&self) {
-    //     for arr in self.board {
-    //         for el in arr {
-    //             print!("{el:^4}");
-    //         }
-    //         println!();
-    //     }
-    // }
-
-
-
-    pub fn run(&self) {
-        println!("run!");
+    pub fn change_state(&mut self,state: State){
+        self.state = state;
     }
+
+
+    
+
+    
 
 }
