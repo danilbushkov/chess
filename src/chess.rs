@@ -15,9 +15,10 @@ mod crd;
 mod piece;
 mod state;
 mod board;
+pub mod code;
 
 
-
+use crate::chess::code::Code;
 use crate::chess::state::State;
 use crate::chess::board::Board;
 use crate::chess::crd::Crd;
@@ -50,7 +51,10 @@ impl Chess {
     }
 
 
-    
+    pub fn handler(&self, crd: Crd) -> Code {
+
+        Code::None
+    }
 
     
 

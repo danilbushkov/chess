@@ -1,4 +1,5 @@
-enum Code{
+pub enum Code{
     Exit,
     None,
+    
 }
