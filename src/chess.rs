@@ -11,11 +11,12 @@
 // 1 - white
 // 2 - black
 
-mod crd;
+
 mod piece;
 mod state;
 mod board;
 pub mod code;
+pub mod crd;
 
 
 use crate::chess::code::Code;

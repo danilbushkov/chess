@@ -3,6 +3,7 @@ use std::io;
 
 use crate::chess::Chess;
 use crate::chess::code::Code;
+use crate::chess::crd::Crd;
 
 
 pub struct ConsoleGame {
@@ -59,15 +60,49 @@ impl ConsoleGame {
             if args[0] == "exit" || args[0] == "Exit" {
                 return Code::Exit;
             }
+            else{
+                self.println_error("Not the right number of arguments. Two arguments are needed");
+            }
         } else if args.len() == 2 {
-            
+            match self.args_to_i8(&args) {
+                Some(n) => {
+                    match Crd::create(n.0, n.1) {
+                        Some(crd) => {
+                            return self.chess.handler(crd);
+                        }
+                        None => {
+                            self.println_error("Coordinates are incorrect");
+                            return Code::None;
+                        }
+                    }
+                }
+                None => {
+                    self.println_error("No number or number too large");
+                    return Code::None;
+                }
+            }
 
         } else {
             self.println_error("There are too many arguments"); 
         }
-
         Code::None
     }
+
+    fn args_to_i8(&self, v: &Vec<String>) -> Option<(i8,i8)> {
+        let mut numbers: [i8; 2] = [0, 0];
+
+        for (i, item) in v.iter().enumerate(){
+            match item.parse::<i8>() {
+                Ok(n) => {
+                    numbers[i] = n;
+                } 
+                Err(_) => {
+                    return None;
+                }
+            }
+        }
+        return Some( (numbers[0], numbers[1]) )
+    }   
 
     fn get_vec_crd(&self) -> Vec<String> {
         let mut input = String::new();

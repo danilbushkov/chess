@@ -5,7 +5,7 @@ pub struct Crd {
 }
 
 impl Crd {
-    pub fn new(x: i8, y: i8) -> Option<Self> { 
+    pub fn create(x: i8, y: i8) -> Option<Self> { 
         if (x<0) && (x>7) {
             return None;
         }
