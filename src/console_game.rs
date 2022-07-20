@@ -50,7 +50,9 @@ impl ConsoleGame {
     }
 
     fn game_move(&self) -> Code {
-        //print board
+        println!();
+        self.print_board();
+        println!();
 
         println!("Enter coordinates: ");
         let args = self.get_vec_crd();
@@ -86,6 +88,24 @@ impl ConsoleGame {
             self.println_error("There are too many arguments"); 
         }
         Code::None
+    }
+
+    fn print_board(&self){
+        print!("{:3}", " ");
+        for i in 0..8 {
+            print!("{i:4}");
+        }
+        println!();
+        println!("{:<3}{:-<32}"," " ,"-");
+
+        for (i, arr) in self.chess.get_board().iter().enumerate() {
+            print!(" {i:<2}|");
+            for item in arr {
+                
+                print!("{:3} ", item);
+            }
+            println!();
+        }
     }
 
     fn args_to_i8(&self, v: &Vec<String>) -> Option<(i8,i8)> {

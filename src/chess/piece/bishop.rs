@@ -10,4 +10,8 @@ impl Bishop {
             player,
         }
     }
+
+    pub fn get_player(&self) -> i8 {
+        self.player
+    }
 }

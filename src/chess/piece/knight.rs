@@ -9,4 +9,8 @@ impl Knight {
             player,
         }
     }
+
+    pub fn get_player(&self) -> i8 {
+        self.player
+    }
 }

@@ -1,16 +1,3 @@
-//  white/black
-// 0 - empty cell
-// 1/2 - pawn
-// 3/4 - rook
-// 5/6 - knight
-// 7/8 - bishop
-// 9/10 - queen
-// 11/12 - king
-
-// player: 
-// 1 - white
-// 2 - black
-
 
 mod piece;
 mod state;
@@ -55,6 +42,10 @@ impl Chess {
     pub fn handler(&self, crd: Crd) -> Code {
 
         Code::None
+    }
+
+    pub fn get_board(&self) -> [[i8; 8]; 8] {
+        self.board.get_board()
     }
 
     
