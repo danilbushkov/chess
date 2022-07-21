@@ -21,7 +21,7 @@ impl ConsoleGame {
     }
 
 
-    pub fn run(&self){
+    pub fn run(&mut self){
         self.clear_screen();
         let mut code: i8 = 0;
 
@@ -33,14 +33,15 @@ impl ConsoleGame {
         }
     }
 
-    fn code_selection(&self, code: i8){
+    fn code_selection(&mut self, code: i8){
         match code {
             1 => self.game(),
             _ => (),
         }
     }
 
-    fn game(&self) {
+    fn game(&mut self) {
+        self.chess.init();
         let mut code: Code = Code::None;
         while match code {
             Code::Exit => false,

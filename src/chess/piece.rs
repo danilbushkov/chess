@@ -44,8 +44,22 @@ pub enum Piece {
 
 
 impl Piece {
-    pub fn create_none() -> Self {
-        Piece::Knight(Knight::create(1))
+    pub fn create(code: i8) -> Self {
+        match code {
+            1 => Piece::Pawn(Pawn::create(1)),
+            2 => Piece::Pawn(Pawn::create(2)),
+            3 => Piece::Rook(Rook::create(1)),
+            4 => Piece::Rook(Rook::create(2)),
+            5 => Piece::Knight(Knight::create(1)),
+            6 => Piece::Knight(Knight::create(2)),
+            7 => Piece::Bishop(Bishop::create(1)),
+            8 => Piece::Bishop(Bishop::create(2)),
+            9 => Piece::Queen(Queen::create(1)),
+            10 => Piece::Queen(Queen::create(2)),
+            11 => Piece::King(King::create(1)),
+            12 => Piece::King(King::create(2)),
+            _ => Piece::None,
+        }
     }
 
 
@@ -85,6 +99,8 @@ impl Piece {
             Piece::None => 0,
         }
     }
+
+
 
 
 }

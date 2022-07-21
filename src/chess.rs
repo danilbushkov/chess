@@ -48,6 +48,10 @@ impl Chess {
         self.board.get_board()
     }
 
+    pub fn init(&mut self){
+        self.board.init();
+    }
+
     
 
 }
