@@ -1,10 +1,9 @@
 
 
-mod chess;
 mod console_game;
 
 
-use chess::Chess;
+use chess::chess::Chess;
 use console_game::ConsoleGame;
 
 fn main() {

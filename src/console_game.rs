@@ -1,9 +1,9 @@
 
 use std::io;
 
-use crate::chess::Chess;
-use crate::chess::code::Code;
-use crate::chess::crd::Crd;
+use chess::chess::Chess;
+use chess::chess::code::Code;
+use chess::chess::crd::Crd;
 
 
 pub struct ConsoleGame {
