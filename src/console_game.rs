@@ -7,14 +7,14 @@ use chess::chess::crd::Crd;
 
 
 pub struct ConsoleGame<'a> {
-    chess: &'a mut Chess<'a>,
+    chess: Chess<'a>,
 }
 
 
 
 impl<'a> ConsoleGame<'a> {
 
-    pub fn create(chess: &'a mut Chess<'a>) -> Self {
+    pub fn create(chess: Chess<'a>) -> Self {
         Self{
             chess,
         }
