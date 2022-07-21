@@ -7,8 +7,8 @@ use chess::chess::Chess;
 use console_game::ConsoleGame;
 
 fn main() {
-    let chess = Chess::create();
-    let mut game = ConsoleGame::create(chess);
+    let mut chess = Chess::create();
+    let mut game = ConsoleGame::create(&mut chess);
     
     game.run();
 

@@ -15,15 +15,15 @@ use crate::chess::piece::Piece;
 
 
 
-pub struct Chess {
+pub struct Chess<'a> {
     player: i8,
     board: Board,
-    state: State,
+    state: State<'a>,
     moves: Vec<Crd>,
     input_crd: Crd,
 }
 
-impl Chess {
+impl<'a> Chess<'a> {
 
     pub fn create() -> Self{
         Self {
@@ -36,7 +36,7 @@ impl Chess {
     }
 
 
-    pub fn change_state(&mut self,state: State){
+    pub fn change_state(&mut self,state: State<'a>){
         self.state = state;
     }
 

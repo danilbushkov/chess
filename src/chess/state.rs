@@ -5,16 +5,16 @@ use crate::chess::state::select_piece::SelectPieceState;
 use crate::chess::Chess;
 use crate::chess::code::Code;
 
-pub enum State {
-    SelectPieceState(SelectPieceState),
+pub enum State<'a> {
+    SelectPieceState(SelectPieceState<'a>),
     MoveState,
     CheckState,
     ResultState,
     None,
 }
 
-impl State {
-    pub fn begin_state(chess: &Chess) -> Self {
+impl<'a> State<'a> {
+    pub fn begin_state(chess: &'a Chess) -> Self {
         Self::SelectPieceState(SelectPieceState::create(&chess))
     }
 

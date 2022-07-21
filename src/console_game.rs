@@ -6,15 +6,15 @@ use chess::chess::code::Code;
 use chess::chess::crd::Crd;
 
 
-pub struct ConsoleGame {
-    chess: Chess,
+pub struct ConsoleGame<'a> {
+    chess: &'a mut Chess<'a>,
 }
 
 
 
-impl ConsoleGame {
+impl<'a> ConsoleGame<'a> {
 
-    pub fn create(chess: Chess) -> Self {
+    pub fn create(chess: &'a mut Chess<'a>) -> Self {
         Self{
             chess,
         }

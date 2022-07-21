@@ -4,13 +4,13 @@ use crate::chess::Chess;
 use crate::chess::code::Code;
 
 
-pub struct SelectPieceState {
-    chess: &Chess,
+pub struct SelectPieceState<'a> {
+    chess: &'a Chess<'a>,
 }
 
 
-impl SelectPieceState {
-    pub fn create(chess: &Chess) -> Self {
+impl<'a> SelectPieceState<'a> {
+    pub fn create(chess: &'a Chess) -> Self {
         Self {
             chess,
         }
