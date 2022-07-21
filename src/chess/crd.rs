@@ -17,4 +17,18 @@ impl Crd {
             y,
         })
     }
+    pub fn default() -> Self {
+        Self{
+            x: 0,
+            y: 0,
+        }
+    }
+
+    pub fn x(&self) -> i8 {
+        self.x as i8
+    }
+
+    pub fn y(&self) -> i8 {
+        self.y as i8
+    }
 }

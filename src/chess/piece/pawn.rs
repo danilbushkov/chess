@@ -1,3 +1,6 @@
+
+use crate::chess::crd::Crd;
+
 #[derive(Copy, Clone)]
 pub struct Pawn {
     player: i8,
@@ -16,5 +19,10 @@ impl Pawn {
 
     pub fn get_player(&self) -> i8 {
         self.player
+    }
+
+    pub fn get_moves(&self, crd: &Crd) -> Vec<Crd> {
+
+        vec![]
     }
 }

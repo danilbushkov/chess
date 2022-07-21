@@ -50,7 +50,7 @@ impl ConsoleGame {
     
     }
 
-    fn game_move(&self) -> Code {
+    fn game_move(&mut self) -> Code {
         println!();
         self.print_board();
         println!();
@@ -99,7 +99,7 @@ impl ConsoleGame {
         println!();
         println!("{:<3}{:-<32}"," " ,"-");
 
-        for (i, arr) in self.chess.get_board().iter().enumerate() {
+        for (i, arr) in self.chess.get_board_i8().iter().enumerate() {
             print!(" {i:<2}|");
             for item in arr {
                 
