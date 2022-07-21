@@ -1,6 +1,7 @@
 
 
 use crate::chess::piece::Piece;
+use crate::chess::crd::Crd;
 
 pub struct Board {
     board: [[Piece; 8]; 8],
@@ -31,6 +32,7 @@ impl Board {
         self.from(self.start_board());
     }
 
+
     pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
         for (i, arr) in board_i8.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
@@ -51,5 +53,17 @@ impl Board {
             [3, 5, 7, 9, 11,7, 5, 3],
         ]
     }
+
+    pub fn check_borders(crd: &Crd) -> bool{
+        (crd.x() >= 0 && crd.x() < 8) && (crd.y() >= 0 && crd.y() < 8)
+    }
+
+    pub fn get_piece(&self, crd: &Crd) -> &Piece {
+
+        &self.board[crd.x() as usize][crd.y() as usize]
+        
+    }
+
+    
 
 }

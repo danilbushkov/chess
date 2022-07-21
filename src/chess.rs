@@ -10,6 +10,7 @@ use crate::chess::code::Code;
 use crate::chess::state::State;
 use crate::chess::board::Board;
 use crate::chess::crd::Crd;
+use crate::chess::piece::Piece;
 
 
 
@@ -19,7 +20,7 @@ pub struct Chess {
     board: Board,
     state: State,
     moves: Vec<Crd>,
-
+    input_crd: Crd,
 }
 
 impl Chess {
@@ -29,7 +30,8 @@ impl Chess {
             player: 1,
             moves: Vec::new(),
             board: Board::create(),
-            state: State::SelectPieceState,
+            state: State::None,
+            input_crd: Crd::default(),
         }
     }
 
@@ -39,12 +41,15 @@ impl Chess {
     }
 
 
-    pub fn handler(&self, crd: Crd) -> Code {
-
-        Code::None
+    pub fn handler(&mut self, crd: Crd) -> Code {
+        if !Board::check_borders(&crd) {
+            return Code::IncorrectCrd;
+        }
+        self.input_crd = crd;
+        self.state.handler()
     }
 
-    pub fn get_board(&self) -> [[i8; 8]; 8] {
+    pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
         self.board.get_board()
     }
 
@@ -52,6 +57,20 @@ impl Chess {
         self.board.init();
     }
 
-    
+    pub fn get_moves(&mut self, moves: Vec<Crd>) {
+        self.moves = moves;
+    }
+
+    pub fn get_board(&self) -> &Board {
+        &self.board
+    }
+
+    pub fn get_crd(&self) -> &Crd {
+        &self.input_crd
+    }
+
+    pub fn get_piece(&self) -> &Piece {
+        self.board.get_piece(&self.input_crd)
+    }
 
 }
