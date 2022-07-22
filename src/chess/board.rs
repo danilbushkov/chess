@@ -4,15 +4,23 @@ use crate::chess::piece::Piece;
 use crate::chess::crd::Crd;
 
 pub struct Board {
-    board: [[Piece; 8]; 8],
+    board: Vec<Vec<Box<Piece>>>,
 }
 
 
 impl Board {
-
+    
     pub fn create() -> Self {
+        let mut board: Vec<Vec<Box<Piece>>> = Vec::with_capacity(8);
+        for i in 0..8 {
+            board.push(Vec::with_capacity(8));
+            for _ in 0..8 {
+                board[i].push(Box::new(Piece::None));
+            }
+        }
+
         Self {
-            board: [[Piece::None; 8]; 8],
+            board,
         }
     }
 
@@ -36,7 +44,7 @@ impl Board {
     pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
         for (i, arr) in board_i8.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
-                self.board[i][j] = Piece::create(*item);
+                self.board[i][j] = Box::new(Piece::create(*item));
             } 
         }
     }
@@ -58,12 +66,15 @@ impl Board {
         (crd.x() >= 0 && crd.x() < 8) && (crd.y() >= 0 && crd.y() < 8)
     }
 
-    pub fn get_piece(&self, crd: &Crd) -> &Piece {
+    pub fn get_piece(&self, crd: &Crd) -> &Box<Piece> {
 
         &self.board[crd.x() as usize][crd.y() as usize]
         
     }
 
+    pub fn swap(a: &Crd, b: &Crd) {
+
+    }
     
 
 }

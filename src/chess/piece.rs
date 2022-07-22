@@ -31,7 +31,7 @@ use crate::chess::piece::rook::Rook;
 
 
 
-#[derive(Copy, Clone)]
+
 pub enum Piece {
     Bishop(Bishop),
     King(King),

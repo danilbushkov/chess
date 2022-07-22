@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+
 pub struct Knight {
     player: i8,
 }

@@ -2,8 +2,10 @@
 mod piece;
 mod state;
 mod board;
+mod algorithm;
 pub mod code;
 pub mod crd;
+
 
 
 use crate::chess::code::Code;
@@ -49,6 +51,10 @@ impl<'a> Chess<'a> {
         self.state.handler()
     }
 
+
+
+
+
     pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
         self.board.get_board()
     }
@@ -69,7 +75,7 @@ impl<'a> Chess<'a> {
         &self.input_crd
     }
 
-    pub fn get_piece(&self) -> &Piece {
+    pub fn get_piece(&self) -> &Box<Piece> {
         self.board.get_piece(&self.input_crd)
     }
 

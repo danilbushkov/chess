@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+
 pub struct Rook {
     player: i8,
     first_move: bool,

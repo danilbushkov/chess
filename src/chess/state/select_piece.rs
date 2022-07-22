@@ -17,12 +17,10 @@ impl<'a> SelectPieceState<'a> {
     }
 
     pub fn handler(&self) -> Code {
-        self.get_moves();
+        //self.get_moves();
 
         Code::None
     }
 
-    pub fn get_moves(&self) {
-        //self.chess.get_moves();
-    }
+  
 }

@@ -1,7 +1,6 @@
 
 use crate::chess::crd::Crd;
 
-#[derive(Copy, Clone)]
 pub struct Pawn {
     player: i8,
     two_moves: bool,

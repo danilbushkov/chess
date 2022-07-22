@@ -1,4 +1,4 @@
-#[derive(Copy, Clone)]
+
 pub struct Queen {
     player: i8,
 }
