@@ -1,7 +1,7 @@
 
 use crate::chess::Chess;
 
-impl<'a> Chess<'a> {
+impl Chess {
     
     //fn 
 

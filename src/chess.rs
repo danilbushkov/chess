@@ -1,8 +1,8 @@
 
 mod piece;
-mod state;
 mod board;
 mod algorithm;
+pub mod state;
 pub mod code;
 pub mod crd;
 
@@ -17,18 +17,19 @@ use crate::chess::piece::Piece;
 
 
 
-pub struct Chess<'a> {
+pub struct Chess{
     player: i8,
     board: Board,
-    state: State<'a>,
+    state: State,
     moves: Vec<Crd>,
     piece_crd: Crd,
     move_crd: Crd,
 }
 
-impl<'a> Chess<'a> {
+impl Chess {
 
-    pub fn create() -> Self{
+    pub fn create() -> Self {
+
         Self {
             player: 1,
             moves: Vec::new(),
@@ -40,7 +41,7 @@ impl<'a> Chess<'a> {
     }
 
 
-    pub fn change_state(&mut self,state: State<'a>){
+    pub fn change_state(&mut self, state: State){
         self.state = state;
     }
 
@@ -105,8 +106,8 @@ impl<'a> Chess<'a> {
         self.board.get_piece(crd)
     }
 
-    pub fn is_player_piece(&self, piece: &Box<Piece>) -> bool {
-        match &**piece {
+    pub fn is_player_piece(&self) -> bool {
+        match &**self.get_piece() {
             Piece::None => false,
             piece => piece.get_player() == self.player,
         }

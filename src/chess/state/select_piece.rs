@@ -5,27 +5,23 @@ use crate::chess::code::Code;
 use crate::chess::crd::Crd;
 
 
-pub struct SelectPieceState<'a> {
-    chess: &'a Chess<'a>,
-}
+pub struct SelectPieceState;
 
 
-impl<'a> SelectPieceState<'a> {
-    pub fn create(chess: &'a Chess) -> Self {
-        Self {
-            chess,
-        }
+impl SelectPieceState {
+    pub fn create() -> Self {
+        Self{}
     }
 
     pub fn handler(&self, crd: Crd) -> Code {
-        if !self.chess.check_borders(&crd) {
-            return Code::IncorrectCrd;
-        }
-        let piece = self.chess.get_piece_by_crd(&crd);
-        if !self.chess.is_player_piece(piece) {
-            return Code::NoPiece;
-        }
-        
+        // if !chess.check_borders(&crd) {
+        //     return Code::IncorrectCrd;
+        // }
+        // chess.set_move_crd(crd);
+        // if !chess.is_player_piece() {
+        //     return Code::NoPiece;
+        // }
+
 
         Code::None
     }
