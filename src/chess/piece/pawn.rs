@@ -1,5 +1,6 @@
 
 use crate::chess::crd::Crd;
+use crate::chess::board::Board;
 
 pub struct Pawn {
     player: i8,
@@ -20,8 +21,8 @@ impl Pawn {
         self.player
     }
 
-    pub fn get_moves(&self, crd: &Crd) -> Vec<Crd> {
-
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
+        
         vec![]
     }
 }

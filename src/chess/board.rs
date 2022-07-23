@@ -73,7 +73,7 @@ impl Board {
     }
 
     pub fn swap(a: &Crd, b: &Crd) {
-
+        
     }
     
 

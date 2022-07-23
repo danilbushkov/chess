@@ -22,7 +22,8 @@ pub struct Chess<'a> {
     board: Board,
     state: State<'a>,
     moves: Vec<Crd>,
-    input_crd: Crd,
+    piece_crd: Crd,
+    move_crd: Crd,
 }
 
 impl<'a> Chess<'a> {
@@ -33,7 +34,8 @@ impl<'a> Chess<'a> {
             moves: Vec::new(),
             board: Board::create(),
             state: State::None,
-            input_crd: Crd::default(),
+            piece_crd: Crd::default(),
+            move_crd: Crd::default(),
         }
     }
 
@@ -44,15 +46,24 @@ impl<'a> Chess<'a> {
 
 
     pub fn handler(&mut self, crd: Crd) -> Code {
-        if !Board::check_borders(&crd) {
-            return Code::IncorrectCrd;
-        }
-        self.input_crd = crd;
-        self.state.handler()
+        
+        self.state.handler(crd)
+    }
+
+    pub fn change_player(&mut self) {
+        self.player = match self.player {
+            1 => 2,
+            2 => 1,
+            _ => 1,
+        };
     }
 
 
 
+
+    pub fn check_borders(&self, crd: &Crd) -> bool {
+        Board::check_borders(crd)
+    }
 
 
     pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
@@ -71,12 +82,34 @@ impl<'a> Chess<'a> {
         &self.board
     }
 
-    pub fn get_crd(&self) -> &Crd {
-        &self.input_crd
+    pub fn get_piece_crd(&self) -> &Crd {
+        &self.piece_crd
+    }
+
+    pub fn set_piece_crd(&mut self, crd: Crd) {
+        self.piece_crd = crd;
+    }
+
+    pub fn get_move_crd(&self) -> &Crd {
+        &self.move_crd
+    }
+
+    pub fn set_move_crd(&mut self, crd: Crd) {
+        self.move_crd = crd;
     }
 
     pub fn get_piece(&self) -> &Box<Piece> {
-        self.board.get_piece(&self.input_crd)
+        self.board.get_piece(&self.get_piece_crd())
+    }
+    pub fn get_piece_by_crd(&self, crd: &Crd) -> &Box<Piece> {
+        self.board.get_piece(crd)
+    }
+
+    pub fn is_player_piece(&self, piece: &Box<Piece>) -> bool {
+        match &**piece {
+            Piece::None => false,
+            piece => piece.get_player() == self.player,
+        }
     }
 
 }
