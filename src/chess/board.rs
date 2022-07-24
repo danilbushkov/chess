@@ -4,18 +4,18 @@ use crate::chess::piece::Piece;
 use crate::chess::crd::Crd;
 
 pub struct Board {
-    board: Vec<Vec<Box<Piece>>>,
+    board: Vec<Vec<Option<Box<Piece>>>>,
 }
 
 
 impl Board {
     
     pub fn create() -> Self {
-        let mut board: Vec<Vec<Box<Piece>>> = Vec::with_capacity(8);
+        let mut board: Vec<Vec<Option<Box<Piece>>>> = Vec::with_capacity(8);
         for i in 0..8 {
             board.push(Vec::with_capacity(8));
             for _ in 0..8 {
-                board[i].push(Box::new(Piece::None));
+                board[i].push(None);
             }
         }
 
@@ -29,7 +29,10 @@ impl Board {
 
         for (i, arr) in self.board.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
-                board[i][j] = item.get_code();
+                board[i][j] = match item {
+                    Some(i) => i.get_code(),
+                    None => 0,
+                }
             }
         }
 
@@ -44,7 +47,10 @@ impl Board {
     pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
         for (i, arr) in board_i8.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
-                self.board[i][j] = Box::new(Piece::create(*item));
+                self.board[i][j] = match *item {
+                    0 => None,
+                    other => Some(Box::new(Piece::create(other))),
+                }
             } 
         }
     }
@@ -66,14 +72,20 @@ impl Board {
         (crd.x() >= 0 && crd.x() < 8) && (crd.y() >= 0 && crd.y() < 8)
     }
 
-    pub fn get_piece(&self, crd: &Crd) -> &Box<Piece> {
+    pub fn get_piece(&self, crd: &Crd) -> &Option<Box<Piece>> {
 
         &self.board[crd.x() as usize][crd.y() as usize]
         
     }
 
-    pub fn swap(a: &Crd, b: &Crd) {
-        
+    pub fn move_piece(&mut self, location: &Crd, target: &Crd) {
+        let tmp = self.board[location.x() as usize][location.y() as usize].take();
+        self.board[target.x() as usize][target.y() as usize] = tmp;
+    }   
+
+    pub fn capture(&mut self, location: &Crd, target: &Crd) {
+        self.board[target.x() as usize][target.y() as usize] 
+            = self.board[location.x() as usize][location.y() as usize].take();
     }
     
 

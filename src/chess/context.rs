@@ -86,17 +86,21 @@ impl Context {
         self.move_crd = crd;
     }
 
-    pub fn get_piece(&self) -> &Box<Piece> {
+    pub fn get_piece(&self) -> &Option<Box<Piece>> {
         self.board.get_piece(&self.get_piece_crd())
     }
-    pub fn get_piece_by_crd(&self, crd: &Crd) -> &Box<Piece> {
+    pub fn get_piece_by_crd(&self, crd: &Crd) -> &Option<Box<Piece>> {
         self.board.get_piece(crd)
     }
 
     pub fn is_player_piece(&self) -> bool {
-        match &**self.get_piece() {
-            Piece::None => false,
-            piece => piece.get_player() == self.player,
+        match self.get_piece() {
+            Some(piece) => match &**piece {
+                Piece::None => false,
+                piece => piece.get_player() == self.player,
+            },
+            None => false,
         }
+        
     }
 }
