@@ -1,17 +1,17 @@
 mod select_piece;
 
 
-use crate::chess::state::select_piece::SelectPieceState;
+//use crate::chess::state::State;
 use crate::chess::Chess;
 use crate::chess::code::Code;
 use crate::chess::crd::Crd;
+use crate::chess::context::Context;
 
 pub enum State {
-    SelectPieceState(SelectPieceState),
+    SelectPieceState,
     MoveState,
     CheckState,
     ResultState,
-    None,
 }
 
 impl State {
@@ -19,9 +19,9 @@ impl State {
     //     //Self::SelectPieceState(SelectPieceState::create(chess))
     // }
 
-    pub fn handler(&mut self, crd: Crd) -> Code {
+    pub fn handler(&self, context: &mut Context, crd: Crd) -> Code {
         match self {
-            State::SelectPieceState(s) => s.handler(crd),
+            State::SelectPieceState => State::select_piece_handler(context, crd),
             _ => Code::None,
         }
 

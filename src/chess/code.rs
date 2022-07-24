@@ -1,6 +1,7 @@
 pub enum Code{
     IncorrectCrd,
-    NoPiece,
+    NonePiece,
+    NoneState,
     Exit,
     None,
     

@@ -1,19 +1,18 @@
 
 
 use crate::chess::Chess;
+use crate::chess::state::State;
 use crate::chess::code::Code;
 use crate::chess::crd::Crd;
+use crate::chess::context::Context;
 
 
-pub struct SelectPieceState;
 
+//SelectPieceState
+impl State {
+    
 
-impl SelectPieceState {
-    pub fn create() -> Self {
-        Self{}
-    }
-
-    pub fn handler(&self, crd: Crd) -> Code {
+    pub fn select_piece_handler(chess_context: &mut Context, crd: Crd) -> Code {
         // if !chess.check_borders(&crd) {
         //     return Code::IncorrectCrd;
         // }
