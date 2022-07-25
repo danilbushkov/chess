@@ -24,6 +24,9 @@ impl Pawn {
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
         let mut moves: Vec<Crd> = vec![];
         let direction = [1, -1]; //black, white
+        let side = [(1, 1),(-1, 1)];
+
+
 
         let c = Crd::create(
             crd.x() + direction[(self.player % 2) as usize],
@@ -40,9 +43,15 @@ impl Pawn {
                     moves.push(c.unwrap());
                 }
             }
-
         }
-        
+
         moves
+    }
+    pub fn possible_moves() -> Vec<Crd> {
+        vec![]
+    }
+
+    pub fn possible_capture() -> Vec<Crd> {
+        vec![]
     }
 }
