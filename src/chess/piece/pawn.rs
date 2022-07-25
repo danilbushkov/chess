@@ -22,7 +22,31 @@ impl Pawn {
     }
 
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
+        let mut moves = vec![];
+        let direction = [1, -1]; //black, white
+
+        let crd = Crd::create(
+            crd.x() + direction[(self.player % 2) as usize],
+            crd.y());
         
-        vec![]
+        match crd {
+            Some(c) => {
+                
+            }
+            _=>(),
+        }
+        
+
+        // if self.first_move {
+        //     let crd = Crd::create(
+        //         crd.x() + 2*direction[(self.player % 2) as usize], 
+        //         crd.y());
+        //     if Board::check_borders(&crd) {
+                
+        //     }
+        // }
+
+
+        moves
     }
 }

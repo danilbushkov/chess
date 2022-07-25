@@ -29,7 +29,7 @@ impl Chess {
         }
     }
 
-    pub fn handler(&mut self, crd: Crd) -> Code {
+    pub fn handler(&mut self, crd: Option<Crd>) -> Code {
         let state = self.context.get_state();
         match state {
             Some(s) => s.handler(&mut self.context, crd),

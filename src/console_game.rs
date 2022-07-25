@@ -69,15 +69,15 @@ impl ConsoleGame {
         } else if args.len() == 2 {
             match self.args_to_i8(&args) {
                 Some(n) => {
-                    match Crd::create(n.0, n.1) {
-                        Some(crd) => {
-                            return self.chess.handler(crd);
-                        }
-                        None => {
-                            self.println_error("Coordinates are incorrect");
-                            return Code::None;
-                        }
-                    }
+                        return self.chess.handler(Crd::create(n.0, n.1));
+                        // Some(crd) => {
+                        //     return self.chess.handler(crd);
+                        // }
+                        // None => {
+                        //     self.println_error("Coordinates are incorrect");
+                        //     return Code::None;
+                        // }
+                    
                 }
                 None => {
                     self.println_error("No number or number too large");

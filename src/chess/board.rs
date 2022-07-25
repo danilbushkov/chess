@@ -68,13 +68,15 @@ impl Board {
         ]
     }
 
-    pub fn check_borders(crd: &Crd) -> bool{
-        (crd.x() >= 0 && crd.x() < 8) && (crd.y() >= 0 && crd.y() < 8)
-    }
+    
 
-    pub fn get_piece(&self, crd: &Crd) -> &Option<Box<Piece>> {
+    pub fn get_piece(&self, crd: &Option<Crd>) -> Option<&Box<Piece>> {
 
-        &self.board[crd.x() as usize][crd.y() as usize]
+        match crd {
+            Some(c) => self.board[c.x() as usize][c.y() as usize].as_ref(),
+            None => None,
+        }
+        
         
     }
 

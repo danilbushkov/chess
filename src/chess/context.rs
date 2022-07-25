@@ -10,8 +10,8 @@ pub struct Context {
     board: Board,
     state: Option<State>,
     moves: Vec<Crd>,
-    piece_crd: Crd,
-    move_crd: Crd,
+    piece_crd: Option<Crd>,
+    move_crd: Option<Crd>,
 }
 
 
@@ -39,6 +39,12 @@ impl Context {
 
   //------------------------------------------  
 
+    pub fn get_possible_moves() {
+
+    }
+
+
+  //------------------------------------------
     pub fn change_player(&mut self) {
         self.player = match self.player {
             1 => 2,
@@ -49,9 +55,7 @@ impl Context {
 
 
 
-    pub fn check_borders(&self, crd: &Crd) -> bool {
-        Board::check_borders(crd)
-    }
+    
 
 
     pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
@@ -70,27 +74,31 @@ impl Context {
         &self.board
     }
 
-    pub fn get_piece_crd(&self) -> &Crd {
+    pub fn get_piece_crd(&self) -> &Option<Crd> {
         &self.piece_crd
     }
 
-    pub fn set_piece_crd(&mut self, crd: Crd) {
+    pub fn set_piece_crd(&mut self, crd: Option<Crd>) {
         self.piece_crd = crd;
     }
 
-    pub fn get_move_crd(&self) -> &Crd {
+    pub fn get_move_crd(&self) -> &Option<Crd> {
         &self.move_crd
     }
 
-    pub fn set_move_crd(&mut self, crd: Crd) {
+    pub fn set_move_crd(&mut self, crd: Option<Crd>) {
         self.move_crd = crd;
     }
 
-    pub fn get_piece(&self) -> &Option<Box<Piece>> {
+    pub fn get_piece(&self) -> Option<&Box<Piece>> {
         self.board.get_piece(&self.get_piece_crd())
     }
-    pub fn get_piece_by_crd(&self, crd: &Crd) -> &Option<Box<Piece>> {
+    pub fn get_piece_by_crd(&self, crd: &Option<Crd>) -> Option<&Box<Piece>> {
         self.board.get_piece(crd)
+    }
+
+    pub fn check_moves(&self) -> bool {
+        !self.moves.is_empty()
     }
 
     pub fn is_player_piece(&self) -> bool {
@@ -103,4 +111,5 @@ impl Context {
         }
         
     }
+
 }

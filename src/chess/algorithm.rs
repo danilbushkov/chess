@@ -1,9 +1,11 @@
 
-use crate::chess::Chess;
+use crate::chess::context::Context;
+use crate::chess::board::Board;
 
-impl Chess {
+impl Context {
     
-    //fn 
+    
+
 
 
 }

@@ -17,11 +17,8 @@ impl Crd {
             y,
         })
     }
-    pub fn default() -> Self {
-        Self{
-            x: 0,
-            y: 0,
-        }
+    pub fn default() -> Option<Self> {
+        None
     }
 
     pub fn x(&self) -> i8 {

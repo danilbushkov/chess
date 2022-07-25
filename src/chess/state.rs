@@ -16,7 +16,8 @@ pub enum State {
 impl State {
     
 
-    pub fn handler(&self, context: &mut Context, crd: Crd) -> Code {
+
+    pub fn handler(&self, context: &mut Context, crd: Option<Crd>) -> Code {
         match self {
             State::SelectPieceState => State::select_piece_handler(context, crd),
             _ => Code::None,
