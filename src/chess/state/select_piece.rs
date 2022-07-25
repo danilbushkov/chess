@@ -15,7 +15,7 @@ impl State {
 
     pub fn select_piece_handler(chess_context: &mut Context, crd: Option<Crd>) -> Code {
         
-        if let crd = None {
+        if let None = crd  {
             chess_context.change_state(State::SelectPieceState);
             return Code::IncorrectCrd;
         }

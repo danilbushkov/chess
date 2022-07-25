@@ -91,4 +91,25 @@ impl Board {
     }
     
 
+    pub fn is_piece(&self, crd: &Option<Crd>) -> bool {
+        match self.get_piece(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                _ => true,
+            },
+            None => false,
+        }
+
+    }
+
+    pub fn is_enemy_piece(&self, crd: &Option<Crd>, current_player: i8) -> bool {
+        match self.get_piece(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                ref other => other.get_player() == [1, 2][(current_player % 2) as usize],
+            },
+            None => false,
+        }
+
+    }
 }

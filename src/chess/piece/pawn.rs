@@ -4,7 +4,7 @@ use crate::chess::board::Board;
 
 pub struct Pawn {
     player: i8,
-    two_moves: bool,
+    two_cells: bool,
     first_move: bool,
 }
 
@@ -12,7 +12,7 @@ impl Pawn {
     pub fn create(player: i8) -> Self{
         Self{
             player,
-            two_moves: false,
+            two_cells: false,
             first_move: true,
         }
     }
@@ -22,31 +22,27 @@ impl Pawn {
     }
 
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
-        let mut moves = vec![];
+        let mut moves: Vec<Crd> = vec![];
         let direction = [1, -1]; //black, white
 
-        let crd = Crd::create(
+        let c = Crd::create(
             crd.x() + direction[(self.player % 2) as usize],
             crd.y());
         
-        match crd {
-            Some(c) => {
-                
+        if !board.is_piece(&c) {
+            moves.push(c.unwrap());
+            
+            if self.first_move {
+                let c = Crd::create(
+                    crd.x() + 2*direction[(self.player % 2) as usize], 
+                    crd.y());
+                if !board.is_piece(&c) {
+                    moves.push(c.unwrap());
+                }
             }
-            _=>(),
+
         }
         
-
-        // if self.first_move {
-        //     let crd = Crd::create(
-        //         crd.x() + 2*direction[(self.player % 2) as usize], 
-        //         crd.y());
-        //     if Board::check_borders(&crd) {
-                
-        //     }
-        // }
-
-
         moves
     }
 }

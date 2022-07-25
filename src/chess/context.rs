@@ -39,7 +39,7 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves() {
+    pub fn get_possible_moves(&self) {
 
     }
 

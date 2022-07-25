@@ -16,4 +16,8 @@ impl Rook {
     pub fn get_player(&self) -> i8 {
         self.player
     }
+
+    pub fn pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
+        
+    }
 }
