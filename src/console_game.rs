@@ -52,7 +52,7 @@ impl ConsoleGame {
 
     fn game_move(&mut self) -> Code {
         println!();
-        self.print_board();
+        self.print_color_board();
         println!();
 
         println!("Enter coordinates: ");
@@ -91,7 +91,7 @@ impl ConsoleGame {
         Code::None
     }
 
-    fn print_board(&self){
+    fn _print_board(&self){
         print!("{:3}", " ");
         for i in 0..8 {
             print!("{i:4}");
@@ -104,6 +104,28 @@ impl ConsoleGame {
             for item in arr {
                 
                 print!("{:3} ", item);
+            }
+            println!();
+        }
+    }
+
+    fn print_color_board(&self) {
+        print!("{:3}", " ");
+        for i in 0..8 {
+            print!("{i:4}");
+        }
+        println!();
+        println!("{:<3}{:-<32}"," " ,"-");
+
+        for (i, arr) in self.chess.get_color_board().iter().enumerate() {
+            print!(" {i:<2}|");
+            for (a, b) in arr {
+                if *b == 1 {
+                    print!("{:3} ", ConsoleGame::posible_move(&b.to_string()));
+                } else {
+                    print!("{:3} ", a);
+                }
+                
             }
             println!();
         }
@@ -194,6 +216,18 @@ impl ConsoleGame {
 
     fn clear_screen(&self){
         print!("\x1B[2J\x1B[1;1H");
+    }
+
+    fn _white_piece(s: &String) -> String {
+        "\x1B[30m\x1B[47m".to_string() + s + "\x1B[0m"
+    }
+
+    fn _black_piece(s: &String) -> String {
+        "\x1B[30m\x1B[47m".to_string() + s + "\x1B[0m"
+    }
+
+    fn posible_move(s: &String) -> String {
+        "\x1B[42;1m".to_string() + s + "\x1B[0m"
     }
 }
 

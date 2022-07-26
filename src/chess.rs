@@ -41,6 +41,10 @@ impl Chess {
         self.context.get_board_i8()
     }
 
+    pub fn get_color_board(&self) -> [[(i8, i8); 8]; 8] {
+        self.context.get_color_board()
+    }
+
     pub fn init(&mut self){
         self.context.init();
     }

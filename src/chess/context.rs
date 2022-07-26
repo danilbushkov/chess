@@ -39,8 +39,16 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&self) {
+    pub fn get_possible_moves(&mut self) {
 
+        match self.board.get_piece(&self.move_crd) {
+            Some(piece) => {
+                if let Some(c) = &self.move_crd {
+                    self.moves = piece.moves(&c ,&self.board)
+                }
+            }
+            None => (),
+        }
     }
 
 
@@ -52,11 +60,25 @@ impl Context {
             _ => 1,
         };
     }
+    // .0 - cell, .1 - color cell
+    // color:
+    // 0 - normal
+    // 1 - move
+    pub fn get_color_board(&self) -> [[(i8, i8); 8]; 8] {
+        let board = self.get_board_i8();
+        let mut color_board: [[(i8, i8); 8]; 8] = [[(0, 0); 8]; 8];
+        for (i, arr) in board.iter().enumerate() {
+            for (j, item) in arr.iter().enumerate() {
+                color_board[i][j].0 = *item;
+            }   
+        }
+        for item in &self.moves {
+            color_board[item.x() as usize][item.y() as usize].1 = 1; 
+        }
 
 
-
-    
-
+        color_board
+    }
 
     pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
         self.board.get_board()

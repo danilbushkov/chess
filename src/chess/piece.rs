@@ -27,6 +27,7 @@ use crate::chess::piece::knight::Knight;
 use crate::chess::piece::pawn::Pawn;
 use crate::chess::piece::queen::Queen;
 use crate::chess::piece::rook::Rook;
+use crate::chess::board::Board;
 
 
 
@@ -63,9 +64,15 @@ impl Piece {
     }
 
 
-    pub fn moves(&self) -> Vec<Crd> {
+    pub fn moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
         match self {
-            _ => vec![],
+            Piece::Pawn(p) => p.get_moves(crd, board),
+            Piece::Rook(p) => p.get_moves(crd, board),
+            Piece::Knight(p) => p.get_moves(crd, board),
+            Piece::Bishop(p) => p.get_moves(crd, board),
+            Piece::Queen(p) => p.get_moves(crd, board),
+            Piece::King(p) => p.get_moves(crd, board),
+            Piece::None => vec![],
         }
     }
 
