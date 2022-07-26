@@ -23,7 +23,7 @@ impl Knight {
         let mut moves: Vec<Crd> = vec![];
         let direction_1 = [1,-1];
         let direction_2 = [2,-2];
-
+        
         for a in direction_1 {
             for b in direction_2 {
                 let crd_1 = Crd::create(crd.x() + (a as i8), crd.y() + (b as i8));
@@ -31,24 +31,12 @@ impl Knight {
                 let crds = [crd_1, crd_2];
 
                 for crd in crds {
-                    
+                    if !board.is_piece_or_border(&crd) || board.is_enemy_piece(&crd, self.player) {
+                        moves.push(crd.unwrap());
+                    } 
                 }
             }
         } 
-
-
-        // for &(a, b) in &direction {
-        //     let mut search = true;
-        //     while search {
-        //         let crd = Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8));
-                
-        //         search = !board.is_piece(&crd);
-        //         if search || board.is_enemy_piece(&crd, self.player) {
-        //             moves.push(crd.unwrap());
-        //         }
-        //     }
-
-        // }
 
 
         moves
