@@ -39,16 +39,17 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&mut self) {
-
-        match self.board.get_piece(&self.move_crd) {
+    pub fn get_possible_moves(&mut self, crd: &Option<Crd>) -> Vec<Crd> {
+        
+        match self.get_piece_by_crd(&crd) {
             Some(piece) => {
-                if let Some(c) = &self.move_crd {
-                    self.moves = piece.moves(&c ,&self.board)
+                if let Some(c) = crd {
+                    return piece.moves(&c ,&self.board)
                 }
             }
             None => (),
         }
+        vec![]
     }
 
 
@@ -123,8 +124,12 @@ impl Context {
         !self.moves.is_empty()
     }
 
-    pub fn is_player_piece(&self) -> bool {
-        match self.get_piece() {
+    pub fn set_moves(&mut self, moves: Vec<Crd>) {
+        self.moves = moves;
+    }
+
+    pub fn is_player_piece(&self, crd: &Option<Crd>) -> bool {
+        match self.get_piece_by_crd(crd) {
             Some(piece) => match &**piece {
                 Piece::None => false,
                 piece => piece.get_player() == self.player,

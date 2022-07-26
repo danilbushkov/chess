@@ -46,7 +46,18 @@ impl ConsoleGame {
         while match code {
             Code::Exit => false,
             _ => true,
-        } { code = self.game_move(); }
+        } { 
+            code = self.game_move();
+            println!("{}", match code {
+                Code::IncorrectCrd => "incorrect crd",
+                Code::NonePiece => "none piece",
+                Code::NoneState => "none state",
+                Code::NoneMoves => "none moves",
+                Code::Exit => "exit",
+                Code::None => "none",
+            }); 
+        
+        }
     
     }
 
@@ -110,7 +121,7 @@ impl ConsoleGame {
     }
 
     fn print_color_board(&self) {
-        print!("{:3}", " ");
+        print!("{:4}", " ");
         for i in 0..8 {
             print!("{i:4}");
         }
@@ -121,9 +132,9 @@ impl ConsoleGame {
             print!(" {i:<2}|");
             for (a, b) in arr {
                 if *b == 1 {
-                    print!("{:3} ", ConsoleGame::posible_move(&b.to_string()));
+                    print!("{:2} {}"," " ,ConsoleGame::posible_move(&a.to_string()));
                 } else {
-                    print!("{:3} ", a);
+                    print!("{:4}", a);
                 }
                 
             }

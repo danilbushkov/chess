@@ -20,19 +20,20 @@ impl State {
             return Code::IncorrectCrd;
         }
 
-        if !chess_context.is_player_piece() {
+        
+        if !chess_context.is_player_piece(&crd) {
             chess_context.change_state(State::SelectPieceState);
             return Code::NonePiece;
         }
 
-        chess_context.set_move_crd(crd);
-
-        chess_context.get_possible_moves();
-        if !chess_context.check_moves() {
+        let moves = chess_context.get_possible_moves(&crd);
+        if moves.is_empty() {
             chess_context.change_state(State::SelectPieceState);
             return Code::NoneMoves;
         }
 
+        chess_context.set_moves(moves);
+        chess_context.set_move_crd(crd);
         chess_context.change_state(State::SelectPieceState);
         Code::None
     }

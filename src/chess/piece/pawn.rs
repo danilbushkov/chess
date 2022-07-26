@@ -27,7 +27,6 @@ impl Pawn {
         let side = [(1, 1),(-1, 1)];
 
 
-
         let c = Crd::create(
             crd.x() + direction[(self.player % 2) as usize],
             crd.y());

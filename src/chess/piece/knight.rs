@@ -20,6 +20,37 @@ impl Knight {
 
 
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
-        vec![]
+        let mut moves: Vec<Crd> = vec![];
+        let direction_1 = [1,-1];
+        let direction_2 = [2,-2];
+
+        for a in direction_1 {
+            for b in direction_2 {
+                let crd_1 = Crd::create(crd.x() + (a as i8), crd.y() + (b as i8));
+                let crd_2 = Crd::create(crd.x() + (b as i8), crd.y() + (a as i8));
+                let crds = [crd_1, crd_2];
+
+                for crd in crds {
+                    
+                }
+            }
+        } 
+
+
+        // for &(a, b) in &direction {
+        //     let mut search = true;
+        //     while search {
+        //         let crd = Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8));
+                
+        //         search = !board.is_piece(&crd);
+        //         if search || board.is_enemy_piece(&crd, self.player) {
+        //             moves.push(crd.unwrap());
+        //         }
+        //     }
+
+        // }
+
+
+        moves
     }
 }

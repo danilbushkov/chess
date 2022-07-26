@@ -22,6 +22,23 @@ impl Queen {
 
 
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
-        vec![]
+        let mut moves: Vec<Crd> = vec![];
+        let direction = [(1, 0),(0, 1),(-1, 0),(0, -1),(1, 1),(1, -1),(-1, 1),(-1, -1)];
+
+        for &(ref a, ref b) in &direction {
+            let mut search = true;
+            while search {
+                let crd = Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8));
+                
+                search = !board.is_piece_or_border(&crd);
+                if search || board.is_enemy_piece(&crd, self.player) {
+                    moves.push(crd.unwrap());
+                }
+            }
+
+        }
+
+
+        moves
     }
 }

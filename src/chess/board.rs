@@ -99,7 +99,17 @@ impl Board {
             },
             None => false,
         }
+    }
 
+
+    pub fn is_piece_or_border(&self, crd: &Option<Crd>) -> bool {
+        match self.get_piece(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                _ => true,
+            },
+            None => true,
+        }
     }
 
     pub fn is_enemy_piece(&self, crd: &Option<Crd>, current_player: i8) -> bool {
