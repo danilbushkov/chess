@@ -119,4 +119,21 @@ impl Board {
         }
 
     }
+
+    pub fn get_enemy_piece(&self, crd: &Option<Crd>, current_player: i8) -> Option<&Box<Piece>> {
+        match crd {
+            Some(c) => {
+                match self.board[c.x() as usize][c.y() as usize] {
+                    Some(ref p) => {
+                        if p.get_player() == [1, 2][(current_player % 2) as usize] {
+                            return Some(p);
+                        }
+                        None
+                    },
+                    None => None, 
+                }
+            },
+            None => None,
+        }
+    }
 }
