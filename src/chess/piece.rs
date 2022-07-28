@@ -19,7 +19,7 @@ mod pawn;
 mod queen;
 mod rook;
 
-
+use std::collections::HashSet;
 use crate::chess::crd::Crd;
 use crate::chess::piece::bishop::Bishop;
 use crate::chess::piece::king::King;
@@ -64,7 +64,7 @@ impl Piece {
     }
 
 
-    pub fn moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
+    pub fn moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
         match self {
             Piece::Pawn(p) => p.get_moves(crd, board),
             Piece::Rook(p) => p.get_moves(crd, board),
@@ -72,7 +72,7 @@ impl Piece {
             Piece::Bishop(p) => p.get_moves(crd, board),
             Piece::Queen(p) => p.get_moves(crd, board),
             Piece::King(p) => p.get_moves(crd, board),
-            Piece::None => vec![],
+            Piece::None => HashSet::new(),
         }
     }
 

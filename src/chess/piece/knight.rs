@@ -1,3 +1,5 @@
+use std::collections::HashSet;
+
 
 use crate::chess::crd::Crd;
 use crate::chess::board::Board;
@@ -21,8 +23,8 @@ impl Knight {
     }
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
-        let mut moves: Vec<Crd> = vec![];
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
+        let mut moves: HashSet<(usize, usize)> = HashSet::new();
         let direction_1 = [1,-1];
         let direction_2 = [2,-2];
         
@@ -32,9 +34,9 @@ impl Knight {
                 let crd_2 = Crd::create(crd.x() + (b as i8), crd.y() + (a as i8));
                 let crds = [crd_1, crd_2];
 
-                for crd in crds {
-                    if !board.is_piece_or_border(&crd) || board.is_enemy_piece(&crd, self.player) {
-                        moves.push(crd.unwrap());
+                for c in crds {
+                    if !board.is_piece_or_border(&c) || board.is_enemy_piece(&c, self.player) {
+                        moves.insert(c.unwrap().get_tuple());
                     } 
                 }
             }

@@ -1,4 +1,4 @@
-
+use std::collections::HashSet;
 
 use crate::chess::crd::Crd;
 use crate::chess::board::Board;
@@ -24,7 +24,7 @@ impl King {
     }
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> Vec<Crd> {
-        vec![]
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
+        HashSet::new()
     }
 }

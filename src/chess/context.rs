@@ -1,5 +1,5 @@
 
-
+use std::collections::HashSet;
 use crate::chess::board::Board;
 use crate::chess::crd::Crd;
 use crate::chess::state::State;
@@ -9,7 +9,7 @@ pub struct Context {
     player: i8,
     board: Board,
     state: Option<State>,
-    moves: Vec<Crd>,
+    moves: HashSet<(usize, usize)>,
     piece_crd: Option<Crd>,
     //move_crd: Option<Crd>,
 }
@@ -20,7 +20,7 @@ impl Context {
 
         Self {
             player: 1,
-            moves: Vec::new(),
+            moves: HashSet::new(),
             board: Board::create(),
             state: Some(State::SelectPieceState),
             piece_crd: Crd::default(),
@@ -39,24 +39,24 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&mut self, crd: &Option<Crd>) -> Vec<Crd> {
+    pub fn get_possible_moves(&mut self, crd: &Option<Crd>) -> HashSet<(usize, usize)> {
         
         match self.get_piece_by_crd(&crd) {
             Some(piece) => {
                 if let Some(c) = crd {
-                    return piece.moves(&c ,&self.board)
+                    return piece.moves(&c ,&self.board);
                 }
             }
             None => (),
         }
-        vec![]
+        HashSet::new()
     }
 
     pub fn check_possible_move(&self, crd: &Option<Crd>) -> bool {
         match crd {
             Some(c) => {
                 for item in &self.moves {
-                    if item == c {
+                    if *item == c.get_tuple() {
                         return true;
                     }
                 }
@@ -114,7 +114,7 @@ impl Context {
             }   
         }
         for item in &self.moves {
-            color_board[item.x() as usize][item.y() as usize].1 = 1; 
+            color_board[item.0][item.1].1 = 1; 
         }
 
 
@@ -129,9 +129,9 @@ impl Context {
         self.board.init();
     }
 
-    pub fn get_moves(&mut self, moves: Vec<Crd>) {
-        self.moves = moves;
-    }
+    // pub fn get_moves(&mut self, moves: Vec<Crd>) {
+    //     self.moves = moves;
+    // }
 
     pub fn get_board(&self) -> &Board {
         &self.board
@@ -164,7 +164,7 @@ impl Context {
         !self.moves.is_empty()
     }
 
-    pub fn set_moves(&mut self, moves: Vec<Crd>) {
+    pub fn set_moves(&mut self, moves: HashSet<(usize, usize)>) {
         self.moves = moves;
     }
 
