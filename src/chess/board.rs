@@ -1,11 +1,12 @@
-
+use std::collections::HashSet;
 
 use crate::chess::piece::Piece;
 use crate::chess::crd::Crd;
 
 pub struct Board {
     board: Vec<Vec<Option<Box<Piece>>>>,
-    
+    //0 - white, 1 - black
+    pieces: [HashSet<(usize, usize)>; 2],
 }
 
 
@@ -20,11 +21,12 @@ impl Board {
                 board[i].push(None);
             }
         }
-
+        
+        let pieces = [HashSet::with_capacity(16), HashSet::with_capacity(16)];
 
         Self {
             board,
-            
+            pieces,
         }
     }
 
@@ -49,16 +51,25 @@ impl Board {
 
 
     pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
-        
+        self.pieces[0].clear();
+        self.pieces[1].clear();
         for (i, arr) in board_i8.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
                 self.board[i][j] = match *item {
                     0 => None,
-                    other => Some(
-                        Box::new(
-                            Piece::create(other,  Crd::create(i as i8, j as i8).unwrap())
-                        )
-                    ),
+                    other => {
+                        let piece = Some(
+                            Box::new(
+                                Piece::create(other)
+                            )
+                        );
+                        if let Some(ref p) = piece {
+                            self.pieces[(p.get_player()/2) as usize].insert((i, j));
+                        }
+
+
+                        piece
+                    },
                 }; 
                 
             } 

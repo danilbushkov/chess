@@ -6,16 +6,16 @@ pub struct Pawn {
     player: i8,
     two_cells: bool,
     first_move: bool,
-    crd: Crd,
+    
 }
 
 impl Pawn {
-    pub fn create(player: i8, crd: Crd) -> Self{
+    pub fn create(player: i8) -> Self{
         Self{
             player,
             two_cells: false,
             first_move: true,
-            crd: crd,
+            
         }
     }
 

@@ -40,4 +40,8 @@ impl Crd {
         self.y as i8
     }
 
+    pub fn get_tuple(&self) -> (usize, usize) {
+        (self.x as usize, self.y as usize)
+    }
+
 }
