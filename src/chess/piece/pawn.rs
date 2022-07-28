@@ -26,7 +26,7 @@ impl Pawn {
         
         moves.append(&mut self.possible_moves(crd, board));
         moves.append(&mut self.possible_capture(crd, board));
-
+        moves.append(&mut self.en_passant(crd, board));
 
         moves
     }
@@ -84,11 +84,29 @@ impl Pawn {
                 crd.x(),
                 crd.y() + b, 
             );
-            if board.is_enemy_piece(&crd_1, self.player) {
-                board.get_piece(&crd_1);
+            
+            let enemy_piece = board.get_enemy_piece(&crd_1, self.player);
+            if let Some(p) = enemy_piece {
+                if p.is_en_passant() {
+                    let crd_2 = Crd::create(
+                        crd.x() + direction[(self.player % 2) as usize], 
+                        crd.y() + b);
+                    if !board.is_piece_or_border(&crd_2) {
+                        moves.push(crd_2.unwrap());
+                    }
+                    
+                }
             }
+
         }
 
         moves 
+    }
+
+
+
+
+    pub fn two_cells(&self) -> bool {
+        self.two_cells
     }
 }

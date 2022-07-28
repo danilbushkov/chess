@@ -108,6 +108,14 @@ impl Piece {
     }
 
 
+    pub fn is_en_passant(&self) -> bool {
+        match self {
+            Piece::Pawn(p) => p.two_cells(), 
+            _ => false,
+        }
+    }
+
+
 
 
 }
