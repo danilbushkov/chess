@@ -45,20 +45,20 @@ pub enum Piece {
 
 
 impl Piece {
-    pub fn create(code: i8) -> Self {
+    pub fn create(code: i8, crd: Crd) -> Self {
         match code {
-            1 => Piece::Pawn(Pawn::create(1)),
-            2 => Piece::Pawn(Pawn::create(2)),
-            3 => Piece::Rook(Rook::create(1)),
-            4 => Piece::Rook(Rook::create(2)),
-            5 => Piece::Knight(Knight::create(1)),
-            6 => Piece::Knight(Knight::create(2)),
-            7 => Piece::Bishop(Bishop::create(1)),
-            8 => Piece::Bishop(Bishop::create(2)),
-            9 => Piece::Queen(Queen::create(1)),
-            10 => Piece::Queen(Queen::create(2)),
-            11 => Piece::King(King::create(1)),
-            12 => Piece::King(King::create(2)),
+            1 => Piece::Pawn(Pawn::create(1, crd)),
+            2 => Piece::Pawn(Pawn::create(2, crd)),
+            3 => Piece::Rook(Rook::create(1, crd)),
+            4 => Piece::Rook(Rook::create(2, crd)),
+            5 => Piece::Knight(Knight::create(1, crd)),
+            6 => Piece::Knight(Knight::create(2, crd)),
+            7 => Piece::Bishop(Bishop::create(1, crd)),
+            8 => Piece::Bishop(Bishop::create(2, crd)),
+            9 => Piece::Queen(Queen::create(1, crd)),
+            10 => Piece::Queen(Queen::create(2, crd)),
+            11 => Piece::King(King::create(1, crd)),
+            12 => Piece::King(King::create(2, crd)),
             _ => Piece::None,
         }
     }
@@ -115,6 +115,12 @@ impl Piece {
         }
     }
 
+    pub fn is_pawn(&self) -> bool {
+        match self {
+            Piece::Pawn(_) => true,
+            _ => false,
+        }
+    }
 
 
 

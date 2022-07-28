@@ -11,7 +11,7 @@ pub struct Context {
     state: Option<State>,
     moves: Vec<Crd>,
     piece_crd: Option<Crd>,
-    move_crd: Option<Crd>,
+    //move_crd: Option<Crd>,
 }
 
 
@@ -24,7 +24,7 @@ impl Context {
             board: Board::create(),
             state: Some(State::SelectPieceState),
             piece_crd: Crd::default(),
-            move_crd: Crd::default(),
+            //move_crd: Crd::default(),
         }
     }
 
@@ -51,6 +51,46 @@ impl Context {
         }
         vec![]
     }
+
+    pub fn check_possible_move(&self, crd: &Option<Crd>) -> bool {
+        match crd {
+            Some(c) => {
+                for item in &self.moves {
+                    if item == c {
+                        return true;
+                    }
+                }
+                false
+            },
+            None => false,
+        }
+    }
+
+    pub fn is_en_passant(&self, crd: &Option<Crd>) -> bool {
+        if self.is_player_piece(&self.piece_crd) {
+            match self.get_piece() {
+                Some(piece) => {
+                    if piece.is_pawn() {
+                        if !self.board.is_piece_or_border(&crd) {
+                            if let Some(c) = crd {
+                                let piece_crd = self.piece_crd.as_ref().unwrap();
+                                if (c.y() - piece_crd.y()).abs() == 1 {
+                                    return true;
+                                }
+        
+                            }
+                        }
+
+
+                    }
+                },
+                None => return false,
+            }
+            
+        }
+        false
+    }
+
 
 
   //------------------------------------------
@@ -105,13 +145,13 @@ impl Context {
         self.piece_crd = crd;
     }
 
-    pub fn get_move_crd(&self) -> &Option<Crd> {
-        &self.move_crd
-    }
+    // pub fn get_move_crd(&self) -> &Option<Crd> {
+    //     &self.move_crd
+    // }
 
-    pub fn set_move_crd(&mut self, crd: Option<Crd>) {
-        self.move_crd = crd;
-    }
+    // pub fn set_move_crd(&mut self, crd: Option<Crd>) {
+    //     self.move_crd = crd;
+    // }
 
     pub fn get_piece(&self) -> Option<&Box<Piece>> {
         self.board.get_piece(&self.get_piece_crd())

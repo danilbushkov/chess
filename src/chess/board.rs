@@ -5,6 +5,7 @@ use crate::chess::crd::Crd;
 
 pub struct Board {
     board: Vec<Vec<Option<Box<Piece>>>>,
+    
 }
 
 
@@ -12,6 +13,7 @@ impl Board {
     
     pub fn create() -> Self {
         let mut board: Vec<Vec<Option<Box<Piece>>>> = Vec::with_capacity(8);
+        
         for i in 0..8 {
             board.push(Vec::with_capacity(8));
             for _ in 0..8 {
@@ -19,8 +21,10 @@ impl Board {
             }
         }
 
+
         Self {
             board,
+            
         }
     }
 
@@ -45,12 +49,18 @@ impl Board {
 
 
     pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
+        
         for (i, arr) in board_i8.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
                 self.board[i][j] = match *item {
                     0 => None,
-                    other => Some(Box::new(Piece::create(other))),
-                }
+                    other => Some(
+                        Box::new(
+                            Piece::create(other,  Crd::create(i as i8, j as i8).unwrap())
+                        )
+                    ),
+                }; 
+                
             } 
         }
     }

@@ -1,5 +1,5 @@
 mod select_piece;
-
+mod select_move;
 
 
 use crate::chess::code::Code;
@@ -14,9 +14,6 @@ pub enum State {
 }
 
 impl State {
-    
-
-
     pub fn handler(&self, context: &mut Context, crd: Option<Crd>) -> Code {
         match self {
             State::SelectPieceState => State::select_piece_handler(context, crd),

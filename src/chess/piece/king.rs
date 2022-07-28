@@ -7,13 +7,15 @@ use crate::chess::board::Board;
 pub struct King {
     player: i8,
     first_move: bool,
+    crd: Crd,
 }
 
 impl King {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: i8, crd: Crd) -> Self{
         Self{
             player,
             first_move: true,
+            crd: crd,
         }
     }
 

@@ -53,6 +53,7 @@ impl ConsoleGame {
                 Code::NonePiece => "none piece",
                 Code::NoneState => "none state",
                 Code::NoneMoves => "none moves",
+                Code::ReselectPiece => "ReselectPiece",
                 Code::Exit => "exit",
                 Code::None => "none",
             }); 

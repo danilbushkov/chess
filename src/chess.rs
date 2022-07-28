@@ -15,7 +15,7 @@ use crate::chess::context::Context;
 
 
 
-pub struct Chess{
+pub struct Chess {
     context: Context,
 
     

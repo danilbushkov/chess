@@ -33,7 +33,7 @@ impl State {
         }
 
         chess_context.set_moves(moves);
-        chess_context.set_move_crd(crd);
+        chess_context.set_piece_crd(crd);
         chess_context.change_state(State::SelectPieceState);
         Code::None
     }

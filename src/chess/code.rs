@@ -3,7 +3,7 @@ pub enum Code{
     NonePiece,
     NoneState,
     NoneMoves,
-    
+    ReselectPiece,
     Exit,
     None,
     

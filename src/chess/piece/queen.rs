@@ -5,12 +5,14 @@ use crate::chess::board::Board;
 
 pub struct Queen {
     player: i8,
+    crd: Crd,
 }
 
 impl Queen {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: i8, crd: Crd) -> Self{
         Self{
             player,
+            crd: crd,
         }
     }
 

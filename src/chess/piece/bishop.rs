@@ -5,13 +5,15 @@ use crate::chess::board::Board;
 
 pub struct Bishop {
     player: i8,
+    crd: Crd,
 
 }
 
 impl Bishop {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: i8, crd: Crd) -> Self{
         Self{
             player,
+            crd: crd,
         }
     }
 

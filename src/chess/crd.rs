@@ -4,6 +4,17 @@ pub struct Crd {
     y:i8,
 }
 
+
+impl PartialEq for Crd {
+    fn eq(&self, other: &Self) -> bool {
+        self.x == other.x && 
+        self.y == other.y
+    }
+}
+
+
+
+
 impl Crd {
     pub fn create(x: i8, y: i8) -> Option<Self> { 
         if (x<0) || (x>7) {
@@ -28,4 +39,5 @@ impl Crd {
     pub fn y(&self) -> i8 {
         self.y as i8
     }
+
 }
