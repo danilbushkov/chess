@@ -61,31 +61,39 @@ impl Context {
         }
     }
 
-    pub fn is_en_passant(&self, crd: &Option<Crd>) -> bool {
-        if self.is_player_piece(&self.piece_crd) {
-            match self.get_piece() {
-                Some(piece) => {
-                    if piece.is_pawn() {
-                        if !self.board.is_piece_or_border(&crd) {
-                            if let Some(c) = crd {
-                                let piece_crd = self.piece_crd.as_ref().unwrap();
-                                if (c.y() - piece_crd.y()).abs() == 1 {
-                                    return true;
-                                }
-        
-                            }
-                        }
-
-
-                    }
-                },
-                None => return false,
-            }
-            
+    pub fn en_passant(&mut self, crd: &Option<Crd>) -> bool {
+        if self.board.is_piece_or_border(&crd) {
+            return false;
         }
+        if !self.is_player_piece(&self.piece_crd) {
+            return false;
+        }
+
+        let player = self.get_piece().unwrap();
+        if !player.is_pawn() {
+            return false;
+        }
+        
+        let player_crd = self.piece_crd.as_ref().unwrap();
+        let target_crd = crd.as_ref().unwrap();
+        let direction = target_crd.y() - player_crd.y();
+        if direction.abs() != 1 {
+            return false;
+        }
+        let enemy_crd = Crd::create(player_crd.x(), player_crd.y() + direction);
+        if let Some(enemy) = self.get_piece_by_crd(&enemy_crd) {
+            if enemy.is_pawn() {
+                if let Some(enemy_crd) = enemy_crd {
+                    self.board.move_piece(player_crd, target_crd);
+                    self.board.remove_piece(&enemy_crd);
+                    return true;
+                }
+            }
+        }
+        
         false
     }
-
+    
 
 
   //------------------------------------------

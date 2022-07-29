@@ -28,12 +28,8 @@ impl State {
         }
 
         if chess_context.check_possible_move(&crd) {
-            if chess_context.is_en_passant(&crd) {
-                // chess_context.en_passant(&crd){
-
-                // }
-            } else {
-
+            if !chess_context.en_passant(&crd) {
+                
             }
 
 
