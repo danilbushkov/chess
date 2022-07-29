@@ -32,6 +32,8 @@ impl State {
                 // chess_context.en_passant(&crd){
 
                 // }
+            } else {
+
             }
 
 

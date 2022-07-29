@@ -55,12 +55,7 @@ impl Context {
     pub fn check_possible_move(&self, crd: &Option<Crd>) -> bool {
         match crd {
             Some(c) => {
-                for item in &self.moves {
-                    if *item == c.get_tuple() {
-                        return true;
-                    }
-                }
-                false
+                self.moves.contains(&c.get_tuple())
             },
             None => false,
         }

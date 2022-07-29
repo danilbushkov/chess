@@ -1,4 +1,4 @@
-
+#[derive(Eq, Hash)]
 pub struct Crd {
     x:i8,
     y:i8,
