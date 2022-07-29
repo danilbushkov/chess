@@ -30,18 +30,23 @@ impl Chess {
     }
 
     pub fn handler(&mut self, crd: Option<Crd>) -> Code {
-        let state = self.context.get_state();
-        match state {
-            Some(s) => s.handler(&mut self.context, crd),
-            None => Code::NoneState,
+        match crd {
+            Some(c) => {
+                let state = self.context.get_state();
+                match state {
+                    Some(s) => s.handler(&mut self.context, c),
+                    None => Code::NoneState,
+                }
+            } 
+            None => Code::IncorrectCrd,
         }
     }
 
-    pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
-        self.context.get_board_i8()
+    pub fn get_board_usize(&self) -> [[usize; 8]; 8] {
+        self.context.get_board_usize()
     }
 
-    pub fn get_color_board(&self) -> [[(i8, i8); 8]; 8] {
+    pub fn get_color_board(&self) -> [[(usize, usize); 8]; 8] {
         self.context.get_color_board()
     }
 

@@ -30,8 +30,8 @@ impl Board {
         }
     }
 
-    pub fn get_board(&self) -> [[i8; 8]; 8] {
-        let mut board: [[i8; 8]; 8] = [[0; 8]; 8];
+    pub fn get_board(&self) -> [[usize; 8]; 8] {
+        let mut board: [[usize; 8]; 8] = [[0; 8]; 8];
 
         for (i, arr) in self.board.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
@@ -50,10 +50,10 @@ impl Board {
     }
 
 
-    pub fn from(&mut self, board_i8: [[i8; 8]; 8]) {
+    pub fn from(&mut self, board_isize: [[usize; 8]; 8]) {
         self.pieces[0].clear();
         self.pieces[1].clear();
-        for (i, arr) in board_i8.iter().enumerate() {
+        for (i, arr) in board_isize.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
                 self.board[i][j] = match *item {
                     0 => None,
@@ -76,7 +76,7 @@ impl Board {
         }
     }
 
-    fn start_board(&self) -> [[i8; 8]; 8] {
+    fn start_board(&self) -> [[usize; 8]; 8] {
         [
             [4, 6, 8,10, 12,8, 6, 4],
             [2, 2, 2, 2, 2, 2, 2, 2],
@@ -91,36 +91,30 @@ impl Board {
 
     
 
-    pub fn get_piece(&self, crd: &Option<Crd>) -> Option<&Box<Piece>> {
-
-        match crd {
-            Some(c) => self.board[c.x() as usize][c.y() as usize].as_ref(),
-            None => None,
-        }
-        
-        
+    pub fn get_piece(&self, crd: &Crd) -> Option<&Box<Piece>> {
+        self.get_ref(crd.get_tuple())
     }
 
-    pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
+    // pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
 
-        self.board[crd.x() as usize][crd.y() as usize].as_ref()
+    //     self.board[crd.x() ][crd.y() ].as_ref()
         
-    }
+    // }
 
-    pub fn is_enemy_piece_by_crd(&self, crd: &Crd, current_player: i8) -> bool {
-        match self.get_piece_by_crd(crd) {
-            Some(p) => match **p {
-                Piece::None => false,
-                ref other => other.get_player() == [1, 2][(current_player % 2) as usize],
-            },
-            None => false,
-        }
-    }
+    // pub fn is_enemy_piece_by_crd(&self, crd: &Crd, current_player: isize) -> bool {
+    //     match self.get_piece_by_crd(crd) {
+    //         Some(p) => match **p {
+    //             Piece::None => false,
+    //             ref other => other.get_player() == [1, 2][(current_player % 2) ],
+    //         },
+    //         None => false,
+    //     }
+    // }
 
-    // pub fn get_piece_mut(&mut self, crd: &Option<Crd>) -> Option<&mut Box<Piece>> {
+    // pub fn get_piece_mut(&mut self, crd: &Crd) -> Option<&mut Box<Piece>> {
 
     //     match crd {
-    //         Some(c) => self.board[c.x() as usize][c.y() as usize].as_mut(),
+    //         Some(c) => self.board[c.x() ][c.y() ].as_mut(),
     //         None => None,
     //     }
         
@@ -135,7 +129,7 @@ impl Board {
 
     pub fn move_piece(&mut self, location: &Crd, target: &Crd) {
         
-        let mut tmp = self.board[location.x() as usize][location.y() as usize].take();
+        let mut tmp = self.take(location.get_tuple());
 
         if let Some(t) = &mut tmp {
             if t.get_player() > 0 {
@@ -143,50 +137,57 @@ impl Board {
                 t.change_first_move();
                 t.change_two_calls(location, target);
 
-                self.pieces[(t.get_player()/2) as usize].remove(&location.get_tuple());
-                self.pieces[(t.get_player()/2) as usize].insert(target.get_tuple());
+                self.pieces[(t.get_player()/2)].remove(&location.get_tuple());
+                self.pieces[(t.get_player()/2)].insert(target.get_tuple());
             }
             
         }
-        self.board[target.x() as usize][target.y() as usize] = tmp;
+        self.set(target.get_tuple(), tmp);
+        //self.board[target.x() ][target.y() ] = tmp;
 
 
     }   
 
     pub fn remove_piece(&mut self, target: &Crd) {
-        let piece = self.board[target.x() as usize][target.y() as usize].take();
+        let piece = self.take(target.get_tuple());
 
         if let Some(ref t) = piece {
             if t.get_player() > 0 {
-                self.pieces[(t.get_player()/2) as usize].remove(&target.get_tuple());
+                self.pieces[(t.get_player()/2) ].remove(&target.get_tuple());
             } 
         }
     }
 
     pub fn capture(&mut self, location: &Crd, target: &Crd) {
-        let m_piece = self.board[location.x() as usize][location.y() as usize].as_ref();
-        let r_piece = self.board[target.x() as usize][target.y() as usize].as_ref();
+        let m_piece = self.get_ref(location.get_tuple());
+        let r_piece = self.get_ref(target.get_tuple());
 
         if let Some(m) = m_piece {
             if let Some(r) = r_piece {
                 if m.get_player() > 0 && r.get_player() > 0 {
                     
-                    self.pieces[(r.get_player()/2) as usize].remove(&target.get_tuple());
 
-                    self.pieces[(m.get_player()/2) as usize].remove(&location.get_tuple());
-                    self.pieces[(m.get_player()/2) as usize].insert(target.get_tuple());
+                    self.pieces[0].remove(&location.get_tuple());
+                    self.pieces[0].remove(&target.get_tuple());
+                    self.pieces[m.get_player()/2].insert(target.get_tuple());
                 } 
             }  
         }
 
-        self.board[target.x() as usize][target.y() as usize] 
-            = self.board[location.x() as usize][location.y() as usize].take();
-        self.board[target.x() as usize][target.y() as usize].as_mut().unwrap().change_first_move();
+        let tmp = self.take(location.get_tuple());
+        self.set(target.get_tuple(), tmp);
+
+        // self.board[target.x() ][target.y() ] 
+        //     = self.board[location.x() ][location.y() ].take();
+        if let Some(p) = self.get_mut(target.get_tuple()) {
+            p.change_first_move();
+        }
+        //self.board[target.x() ][target.y() ].as_mut().unwrap().change_first_move();
 
     }
     
 
-    pub fn is_piece(&self, crd: &Option<Crd>) -> bool {
+    pub fn is_piece(&self, crd: &Crd) -> bool {
         match self.get_piece(crd) {
             Some(p) => match **p {
                 Piece::None => false,
@@ -196,7 +197,7 @@ impl Board {
         }
     }
     pub fn is_piece_by_crd(&self, crd: &Crd) -> bool {
-        match self.get_piece_by_crd(crd) {
+        match self.get_piece(crd) {
             Some(p) => match **p {
                 Piece::None => false,
                 _ => true,
@@ -206,39 +207,72 @@ impl Board {
     }
 
 
-    pub fn is_piece_or_border(&self, crd: &Option<Crd>) -> bool {
-        if let None = crd {
-            return true;
-        }
-        self.is_piece(crd)
-    }
+    // pub fn is_piece_or_border(&self, crd: &Crd) -> bool {
+    //     if let None = crd {
+    //         return true;
+    //     }
+    //     self.is_piece(crd)
+    // }
 
-    pub fn is_enemy_piece(&self, crd: &Option<Crd>, current_player: i8) -> bool {
+    pub fn is_enemy_piece(&self, crd: &Crd, current_player: usize) -> bool {
         match self.get_piece(crd) {
             Some(p) => match **p {
                 Piece::None => false,
-                ref other => other.get_player() == [1, 2][(current_player % 2) as usize],
+                ref other => other.get_player() == [1, 2][(current_player % 2)],
             },
             None => false,
         }
 
     }
 
-    pub fn get_enemy_piece(&self, crd: &Option<Crd>, current_player: i8) -> Option<&Box<Piece>> {
-        match crd {
-            Some(c) => {
-                match self.board[c.x() as usize][c.y() as usize] {
-                    Some(ref p) => {
-                        if p.get_player() == [1, 2][(current_player % 2) as usize] {
-                            return Some(p);
-                        }
-                        None
-                    },
-                    None => None, 
+    pub fn get_enemy_piece(&self, crd: &Crd, current_player: usize) -> Option<&Box<Piece>> {
+        match self.get_ref(crd.get_tuple()) {
+            Some(ref p) => {
+                if p.get_player() == [1, 2][(current_player % 2)] {
+                    return Some(p);
                 }
+                None
             },
-            None => None,
+            None => None, 
+        }   
+    }
+
+    pub fn get_player_piece(&self, crd: &Crd, current_player: usize) -> Option<&Box<Piece>> {
+        match self.get_ref(crd.get_tuple()) {
+            Some(ref p) => {
+                if p.get_player() == [1, 2][(current_player % 2)] {
+                    return Some(p);
+                }
+                None
+            },
+            None => None, 
+        }   
+    }
+
+    pub fn is_player_piece(&self, crd: &Crd, current_player: usize) -> bool {
+        match self.get_piece(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                ref other => other.get_player() == current_player,
+            },
+            None => false,
         }
+        
+    }
+
+    pub fn get_ref(&self, (x, y): (usize, usize)) -> Option<&Box<Piece>> {
+        self.board[x][y].as_ref()
+    }
+
+    pub fn get_mut(&mut self, (x, y): (usize, usize)) -> Option<&mut Box<Piece>> {
+        self.board[x][y].as_mut()
+    }
+    pub fn take(&mut self, (x, y): (usize, usize)) -> Option<Box<Piece>> {
+        self.board[x][y].take()
+    }
+
+    pub fn set(&mut self, (x, y): (usize, usize), value: Option<Box<Piece>>) {
+        self.board[x][y] = value;
     }
     
 }

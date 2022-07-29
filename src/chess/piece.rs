@@ -47,7 +47,7 @@ pub enum Piece {
 impl Piece {
 
 
-    pub fn create(code: i8) -> Self {
+    pub fn create(code: usize) -> Self {
         match code {
             1 => Piece::Pawn(Pawn::create(1)),
             2 => Piece::Pawn(Pawn::create(2)),
@@ -78,14 +78,14 @@ impl Piece {
         }
     }
 
-    pub fn get_code(&self) -> i8 {
+    pub fn get_code(&self) -> usize {
         match self {
             Piece::None => 0,
             piece => piece.code() + piece.get_player() / 2,
         }
     }
 
-    fn code(&self) -> i8 {
+    fn code(&self) -> usize {
         match self {
             Piece::Pawn(_) => 1,
             Piece::Rook(_) => 3,
@@ -97,7 +97,7 @@ impl Piece {
         }
     }
 
-    pub fn get_player(&self) -> i8 {
+    pub fn get_player(&self) -> usize {
         match self {
             Piece::Pawn(p) => p.get_player(),
             Piece::Rook(p) => p.get_player(),

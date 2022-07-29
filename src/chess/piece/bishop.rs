@@ -6,20 +6,20 @@ use crate::chess::board::Board;
 
 
 pub struct Bishop {
-    player: i8,
+    player: usize,
     
 
 }
 
 impl Bishop {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: usize) -> Self{
         Self{
             player,
             
         }
     }
 
-    pub fn get_player(&self) -> i8 {
+    pub fn get_player(&self) -> usize {
         self.player
     }
 
@@ -28,15 +28,15 @@ impl Bishop {
         let mut moves: HashSet<(usize, usize)> = HashSet::new();
         let direction = [(1, 1),(1, -1),(-1, 1),(-1, -1)];
 
-        for &(ref a, ref b) in &direction {
+        for (a, b) in &direction {
             let mut search = true;
             let mut crd = crd.clone();
             while search {
-                match Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8)) {
+                match Crd::create(crd.x() + *a, crd.y() + *b) {
                     Some(c) => {
-                        if board.is_piece_by_crd(&c) {
+                        if board.is_piece(&c) {
                             search = false;
-                            if board.is_enemy_piece_by_crd(&c, self.player) {
+                            if board.is_enemy_piece(&c, self.player) {
                                 moves.insert(c.get_tuple());
                             }
                         } else {

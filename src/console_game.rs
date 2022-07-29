@@ -23,7 +23,7 @@ impl ConsoleGame {
 
     pub fn run(&mut self){
         self.clear_screen();
-        let mut code: i8 = 0;
+        let mut code: usize = 0;
 
         while code != 2 {
             code = self.menu();
@@ -33,7 +33,7 @@ impl ConsoleGame {
         }
     }
 
-    fn code_selection(&mut self, code: i8){
+    fn code_selection(&mut self, code: usize){
         match code {
             1 => self.game(),
             _ => (),
@@ -79,9 +79,9 @@ impl ConsoleGame {
                 self.println_error("Not the right number of arguments. Two arguments are needed");
             }
         } else if args.len() == 2 {
-            match self.args_to_i8(&args) {
+            match self.args_to_usize(&args) {
                 Some(n) => {
-                        return self.chess.handler(Crd::create(n.0, n.1));
+                        return self.chess.handler(Crd::create(n.0 as isize, n.1 as isize));
                         // Some(crd) => {
                         //     return self.chess.handler(crd);
                         // }
@@ -111,7 +111,7 @@ impl ConsoleGame {
         println!();
         println!("{:<3}{:-<32}"," " ,"-");
 
-        for (i, arr) in self.chess.get_board_i8().iter().enumerate() {
+        for (i, arr) in self.chess.get_board_usize().iter().enumerate() {
             print!(" {i:<2}|");
             for item in arr {
                 
@@ -143,11 +143,11 @@ impl ConsoleGame {
         }
     }
 
-    fn args_to_i8(&self, v: &Vec<String>) -> Option<(i8,i8)> {
-        let mut numbers: [i8; 2] = [0, 0];
+    fn args_to_usize(&self, v: &Vec<String>) -> Option<(usize,usize)> {
+        let mut numbers: [usize; 2] = [0, 0];
 
         for (i, item) in v.iter().enumerate(){
-            match item.parse::<i8>() {
+            match item.parse::<usize>() {
                 Ok(n) => {
                     numbers[i] = n;
                 } 
@@ -181,7 +181,7 @@ impl ConsoleGame {
 
 
     //0 - error
-    fn menu(&self) -> i8 {
+    fn menu(&self) -> usize {
         
         println!("Menu:");
         println!("1 - play");
@@ -194,7 +194,7 @@ impl ConsoleGame {
 
 
 
-    fn select_menu(&self) -> i8 {
+    fn select_menu(&self) -> usize {
         
         let mut input = String::new();
         self.clear_screen();
@@ -202,7 +202,7 @@ impl ConsoleGame {
             Ok(_) => {
 
                 let string = input.trim();
-                match string.parse::<i8>() {
+                match string.parse::<usize>() {
                     Ok(n) => {
                         n 
                     } 

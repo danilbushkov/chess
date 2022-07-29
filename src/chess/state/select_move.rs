@@ -13,12 +13,7 @@ impl State {
         //chess_context.change_player();
     }
     
-    pub fn select_move_handler(chess_context: &mut Context, crd: Option<Crd>) -> Code {
-        
-        if let None = crd  {
-            chess_context.change_state(State::MoveState);
-            return Code::IncorrectCrd;
-        }
+    pub fn select_move_handler(chess_context: &mut Context, crd: Crd) -> Code {
 
         if chess_context.is_player_piece(&crd) {
             let moves = chess_context.get_possible_moves(&crd);
@@ -44,7 +39,7 @@ impl State {
         Code::None
     }
 
-    fn move_piece(chess_context: &mut Context, crd: &Option<Crd>) -> bool {
+    fn move_piece(chess_context: &mut Context, crd: &Crd) -> bool {
         if chess_context.en_passant(&crd) {
             return true;
         }

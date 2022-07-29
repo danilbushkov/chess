@@ -1,7 +1,7 @@
-#[derive(Eq, Hash)]
+
 pub struct Crd {
-    x:i8,
-    y:i8,
+    x:isize,
+    y:isize,
 }
 
 
@@ -23,7 +23,7 @@ impl Clone for Crd {
 
 
 impl Crd {
-    pub fn create(x: i8, y: i8) -> Option<Self> { 
+    pub fn create(x: isize, y: isize) -> Option<Self> { 
         if (x<0) || (x>7) {
             return None;
         }
@@ -39,16 +39,16 @@ impl Crd {
         None
     }
 
-    pub fn x(&self) -> i8 {
-        self.x as i8
+    pub fn x(&self) -> isize {
+        self.x 
     }
 
-    pub fn y(&self) -> i8 {
-        self.y as i8
+    pub fn y(&self) -> isize {
+        self.y 
     }
 
     pub fn get_tuple(&self) -> (usize, usize) {
-        (self.x as usize, self.y as usize)
+        (self.x as usize , self.y as usize )
     }
 
     

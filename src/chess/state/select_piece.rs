@@ -16,14 +16,8 @@ impl State {
 
 
 
-    pub fn select_piece_handler(chess_context: &mut Context, crd: Option<Crd>) -> Code {
-        
-        if let None = crd  {
-            chess_context.change_state(State::SelectPieceState);
-            return Code::IncorrectCrd;
-        }
+    pub fn select_piece_handler(chess_context: &mut Context, crd: Crd) -> Code {
 
-        
         if !chess_context.is_player_piece(&crd) {
             chess_context.change_state(State::SelectPieceState);
             return Code::NonePiece;

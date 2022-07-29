@@ -6,19 +6,19 @@ use crate::chess::board::Board;
 
 
 pub struct Knight {
-    player: i8,
+    player: usize,
     
 }
 
 impl Knight {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: usize) -> Self{
         Self{
             player,
             
         }
     }
 
-    pub fn get_player(&self) -> i8 {
+    pub fn get_player(&self) -> usize {
         self.player
     }
 
@@ -30,17 +30,23 @@ impl Knight {
         
         for a in direction_1 {
             for b in direction_2 {
-                let crd_1 = Crd::create(crd.x() + (a as i8), crd.y() + (b as i8));
-                let crd_2 = Crd::create(crd.x() + (b as i8), crd.y() + (a as i8));
+                let crd_1 = Crd::create(crd.x() + a, crd.y() + b);
+                let crd_2 = Crd::create(crd.x() + b, crd.y() + a);
                 let crds = [crd_1, crd_2];
 
-                for c in crds {
-                    if !board.is_piece_or_border(&c) || board.is_enemy_piece(&c, self.player) {
-                        moves.insert(c.unwrap().get_tuple());
-                    } 
+                for crd in crds {
+                    if let Some(c) = crd {
+                        if !board.is_piece(&c) || board.is_enemy_piece(&c, self.player) {
+                            moves.insert(c.get_tuple());
+                        }
+                    }
+                    // if !board.is_piece_or_border(&c) || board.is_enemy_piece(&c, self.player) {
+                    //     moves.insert(c.unwrap().get_tuple());
+                    // } 
                 }
             }
         } 
+
 
 
         moves

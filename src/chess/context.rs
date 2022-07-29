@@ -6,7 +6,7 @@ use crate::chess::state::State;
 use crate::chess::piece::Piece;
 
 pub struct Context {
-    player: i8,
+    player: usize,
     board: Board,
     state: Option<State>,
     moves: HashSet<(usize, usize)>,
@@ -24,7 +24,7 @@ impl Context {
             board: Board::create(),
             state: Some(State::SelectPieceState),
             piece_crd: Crd::default(),
-            //move_crd: Crd::default(),
+            
         }
     }
 
@@ -40,93 +40,98 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&mut self, crd: &Option<Crd>) -> HashSet<(usize, usize)> {
+    pub fn get_possible_moves(&mut self, crd: &Crd) -> HashSet<(usize, usize)> {
         
         match self.get_piece_by_crd(&crd) {
-            Some(piece) => {
-                if let Some(c) = crd {
-                    return piece.moves(&c ,&self.board);
-                }
-            }
+            Some(piece) => return piece.moves(&crd ,&self.board),
             None => (),
         }
         HashSet::new()
     }
 
-    pub fn check_possible_move(&self, crd: &Option<Crd>) -> bool {
-        match crd {
-            Some(c) => {
-                self.moves.contains(&c.get_tuple())
-            },
-            None => false,
-        }
+    pub fn check_possible_move(&self, crd: &Crd) -> bool {
+        
+        self.moves.contains(&crd.get_tuple())
+            
     }
 
-    pub fn en_passant(&mut self, crd: &Option<Crd>) -> bool {
-        if self.board.is_piece_or_border(&crd) {
-            return false;
-        }
-        if !self.is_player_piece(&self.piece_crd) {
-            return false;
-        }
+    pub fn en_passant(&mut self, crd: &Crd) -> bool {
+        if let Some(player_crd) = &self.piece_crd {
+            // if !self.board.is_player_piece(player_crd, self.player) {
+            //     return false;
+            // }
+            if let Some(player) = self.board.get_player_piece(player_crd, self.player) {
 
-        let player = self.get_piece().unwrap();
-        if !player.is_pawn() {
-            return false;
-        }
-        
-        let player_crd = self.piece_crd.as_ref().unwrap();
-        let target_crd = crd.as_ref().unwrap();
-        let direction = target_crd.y() - player_crd.y();
-        if direction.abs() != 1 {
-            return false;
-        }
-        let enemy_crd = Crd::create(player_crd.x(), player_crd.y() + direction);
-        if let Some(enemy) = self.get_piece_by_crd(&enemy_crd) {
-            if enemy.is_pawn() {
-                if let Some(enemy_crd) = enemy_crd {
-                    self.board.move_piece(player_crd, target_crd);
-                    self.board.remove_piece(&enemy_crd);
-                    return true;
+                if !player.is_pawn() {
+                    return false;
+                }
+                let direction = crd.y() - player_crd.y();
+                if direction.abs() != 1 {
+                    return false;
+                }
+
+                if let Some(enemy_crd) = Crd::create(player_crd.x(), player_crd.y() + direction) {
+                    if let Some(enemy) = self.board.get_enemy_piece(&enemy_crd, self.player) {
+                        if !enemy.is_pawn() {
+                            return false;
+                        }
+                        self.board.move_piece(player_crd, crd);
+                        self.board.remove_piece(&enemy_crd);
+                        return true;
+                   }
                 }
             }
+
         }
+
+
+        // let player = self.get_piece().unwrap();
+        // if !player.is_pawn() {
+        //     return false;
+        // }
+        
+        //let player_crd = self.piece_crd.as_ref().unwrap();
+        //let target_crd = crd.as_ref().unwrap();
+        //let direction = target_crd.y() - player_crd.y();
+        // if direction.abs() != 1 {
+        //     return false;
+        // }
+        // let enemy_crd = Crd::create(player_crd.x(), player_crd.y() + direction);
+        // if let Some(enemy) = self.get_piece_by_crd(&enemy_crd) {
+        //     if enemy.is_pawn() {
+        //         if let Some(enemy_crd) = enemy_crd {
+        //             self.board.move_piece(player_crd, target_crd);
+        //             self.board.remove_piece(&enemy_crd);
+        //             return true;
+        //         }
+        //     }
+        // }
         
         false
     }
     
-    pub fn move_piece(&mut self, crd: &Option<Crd>) -> bool {
-        if self.board.is_piece_or_border(&crd) {
-            return false;
-        }
-        if !self.is_player_piece(&self.piece_crd) {
-            return false;
-        }
-        if let Some(target) = crd {
-            if let Some(ref player) = self.piece_crd {
-                self.board.move_piece(&player, &target);
-                return true;
+    pub fn move_piece(&mut self, crd: &Crd) -> bool {
+        if let Some(player_crd) = &self.piece_crd {
+            if !self.board.is_player_piece(player_crd, self.player) {
+                return false;
             }
+            self.board.move_piece(player_crd, crd);
+            return true;
         }
         
         false
     }
 
-    pub fn capture(&mut self, crd: &Option<Crd>) -> bool {
-        
-        if !self.is_player_piece(&self.piece_crd) {
-            return false;
-        }
-        
-        if self.board.is_enemy_piece(crd, self.player) {
-            if let Some(target) = crd {
-                if let Some(ref player) = self.piece_crd {
-                    self.board.capture(&player, &target);
-                    return true;
-                }
+    pub fn capture(&mut self, crd: &Crd) -> bool {
+        if let Some(player_crd) = &self.piece_crd {
+            if !self.board.is_player_piece(player_crd, self.player) {
+                return false;
+            }
+            if self.board.is_enemy_piece(crd, self.player) {
+                self.board.capture(player_crd, crd);
+                return true;
             }
         }
-
 
         false
     }
@@ -143,9 +148,9 @@ impl Context {
     // color:
     // 0 - normal
     // 1 - move
-    pub fn get_color_board(&self) -> [[(i8, i8); 8]; 8] {
-        let board = self.get_board_i8();
-        let mut color_board: [[(i8, i8); 8]; 8] = [[(0, 0); 8]; 8];
+    pub fn get_color_board(&self) -> [[(usize, usize); 8]; 8] {
+        let board = self.get_board_usize();
+        let mut color_board: [[(usize, usize); 8]; 8] = [[(0, 0); 8]; 8];
         for (i, arr) in board.iter().enumerate() {
             for (j, item) in arr.iter().enumerate() {
                 color_board[i][j].0 = *item;
@@ -159,7 +164,7 @@ impl Context {
         color_board
     }
 
-    pub fn get_board_i8(&self) -> [[i8; 8]; 8] {
+    pub fn get_board_usize(&self) -> [[usize; 8]; 8] {
         self.board.get_board()
     }
 
@@ -179,11 +184,11 @@ impl Context {
         &self.piece_crd
     }
 
-    pub fn set_piece_crd(&mut self, crd: Option<Crd>) {
-        self.piece_crd = crd;
+    pub fn set_piece_crd(&mut self, crd: Crd) {
+        self.piece_crd = Some(crd);
     }
 
-    // pub fn get_move_crd(&self) -> &Option<Crd> {
+    // pub fn get_move_crd(&self) -> &Crd {
     //     &self.move_crd
     // }
 
@@ -192,14 +197,17 @@ impl Context {
     // }
 
     pub fn get_piece(&self) -> Option<&Box<Piece>> {
-        self.board.get_piece(&self.get_piece_crd())
+        match &self.get_piece_crd() {
+            Some(c) => self.board.get_piece(c),
+            None => None,
+        }
     }
 
     // pub fn get_piece_mut(&mut self) -> Option<&mut Box<Piece>> {
     //     self.board.get_piece_mut(&self.get_piece_crd())
     // }
 
-    pub fn get_piece_by_crd(&self, crd: &Option<Crd>) -> Option<&Box<Piece>> {
+    pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
         self.board.get_piece(crd)
     }
 
@@ -215,15 +223,7 @@ impl Context {
         self.moves = moves;
     }
 
-    pub fn is_player_piece(&self, crd: &Option<Crd>) -> bool {
-        match self.get_piece_by_crd(crd) {
-            Some(piece) => match &**piece {
-                Piece::None => false,
-                piece => piece.get_player() == self.player,
-            },
-            None => false,
-        }
-        
+    pub fn is_player_piece(&self, crd: &Crd) -> bool {
+        self.board.is_player_piece(crd, self.player)
     }
-
 }

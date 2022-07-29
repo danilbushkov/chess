@@ -5,14 +5,14 @@ use crate::chess::crd::Crd;
 use crate::chess::board::Board;
 
 pub struct Pawn {
-    player: i8,
+    player: usize,
     two_cells: bool,
     first_move: bool,
     
 }
 
 impl Pawn {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: usize) -> Self{
         Self{
             player,
             two_cells: false,
@@ -21,7 +21,7 @@ impl Pawn {
         }
     }
 
-    pub fn get_player(&self) -> i8 {
+    pub fn get_player(&self) -> usize {
         self.player
     }
 
@@ -42,22 +42,34 @@ impl Pawn {
 
 
         let c = Crd::create(
-            crd.x() + direction[(self.player % 2) as usize],
+            crd.x() + direction[(self.player % 2) ],
             crd.y());
-        
-        if !board.is_piece_or_border(&c) {
-            moves.insert(c.unwrap().get_tuple());
-            
-            if self.first_move {
-                let c = Crd::create(
-                    crd.x() + 2*direction[(self.player % 2) as usize], 
-                    crd.y());
-                if !board.is_piece_or_border(&c) {
-                    moves.insert(c.unwrap().get_tuple());
+
+        if let Some(c) = c {
+            if !board.is_piece(&c) {
+                moves.insert(c.get_tuple());
+                if self.first_move {
+                    let c = Crd::create(
+                        crd.x() + 2*direction[(self.player % 2) ], 
+                        crd.y());
+                    if let Some(c) = c {
+                        if !board.is_piece(&c) {
+                            moves.insert(c.get_tuple());
+                        }
+                    }
                 }
             }
         }
-
+        // if !board.is_piece_or_border(&c) {
+        //     moves.insert(c.unwrap().get_tuple());
+            
+        //     if self.first_move {
+                
+        //         if !board.is_piece_or_border(&c) {
+        //             moves.insert(c.unwrap().get_tuple());
+        //         }
+        //     }
+        // }
         moves
         
     }
@@ -68,13 +80,14 @@ impl Pawn {
         
         for b in direction {
             let c = Crd::create(
-                crd.x() + direction[(self.player % 2) as usize],
+                crd.x() + direction[(self.player % 2) ],
                 crd.y() + b);
-
-            if board.is_enemy_piece(&c, self.player) {
-                moves.insert(c.unwrap().get_tuple());
+            if let Some(c) = c {
+                if board.is_enemy_piece(&c, self.player) {
+                    moves.insert(c.get_tuple());
+                }
             }
-
+            
         }
 
         moves 
@@ -88,19 +101,22 @@ impl Pawn {
                 crd.x(),
                 crd.y() + b, 
             );
-            
-            let enemy_piece = board.get_enemy_piece(&crd_1, self.player);
-            if let Some(p) = enemy_piece {
-                if p.is_en_passant() {
-                    let crd_2 = Crd::create(
-                        crd.x() + direction[(self.player % 2) as usize], 
-                        crd.y() + b);
-                    if !board.is_piece_or_border(&crd_2) {
-                        moves.insert(crd_2.unwrap().get_tuple());
+            if let Some(c) = crd_1 {
+                let enemy_piece = board.get_enemy_piece(&c, self.player);
+                if let Some(p) = enemy_piece {
+                    if p.is_en_passant() {
+                        let crd_2 = Crd::create(
+                            crd.x() + direction[(self.player % 2)], 
+                            crd.y() + b);
+                        if let Some(c) = crd_2 {
+                            if !board.is_piece(&c) {
+                                moves.insert(c.get_tuple());
+                            }
+                        }
                     }
-                    
                 }
             }
+            
 
         }
 

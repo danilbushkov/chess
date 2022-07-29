@@ -5,13 +5,13 @@ use crate::chess::board::Board;
 
 
 pub struct King {
-    player: i8,
+    player: usize,
     first_move: bool,
    
 }
 
 impl King {
-    pub fn create(player: i8) -> Self{
+    pub fn create(player: usize) -> Self{
         Self{
             player,
             first_move: true,
@@ -19,7 +19,7 @@ impl King {
         }
     }
 
-    pub fn get_player(&self) -> i8 {
+    pub fn get_player(&self) -> usize {
         self.player
     }
 
