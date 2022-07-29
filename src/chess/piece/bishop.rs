@@ -30,18 +30,27 @@ impl Bishop {
 
         for &(ref a, ref b) in &direction {
             let mut search = true;
+            let mut crd = crd.clone();
             while search {
-                let c = Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8));
-                
-                search = !board.is_piece_or_border(&c);
-                if search || board.is_enemy_piece(&c, self.player) {
-                    moves.insert(c.unwrap().get_tuple());
+                match Crd::create(crd.x() + (*a as i8), crd.y() + (*b as i8)) {
+                    Some(c) => {
+                        if board.is_piece_by_crd(&c) {
+                            search = false;
+                            if board.is_enemy_piece_by_crd(&c, self.player) {
+                                moves.insert(c.get_tuple());
+                            }
+                        } else {
+                            moves.insert(c.get_tuple());
+                            crd = c;
+                        }
+                    },
+                    None => {
+                        search = false;
+                    },
                 }
             }
 
         }
-
-
         moves
 
     }

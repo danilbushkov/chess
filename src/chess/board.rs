@@ -101,6 +101,22 @@ impl Board {
         
     }
 
+    pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
+
+        self.board[crd.x() as usize][crd.y() as usize].as_ref()
+        
+    }
+
+    pub fn is_enemy_piece_by_crd(&self, crd: &Crd, current_player: i8) -> bool {
+        match self.get_piece_by_crd(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                ref other => other.get_player() == [1, 2][(current_player % 2) as usize],
+            },
+            None => false,
+        }
+    }
+
     // pub fn get_piece_mut(&mut self, crd: &Option<Crd>) -> Option<&mut Box<Piece>> {
 
     //     match crd {
@@ -179,6 +195,15 @@ impl Board {
             None => false,
         }
     }
+    pub fn is_piece_by_crd(&self, crd: &Crd) -> bool {
+        match self.get_piece_by_crd(crd) {
+            Some(p) => match **p {
+                Piece::None => false,
+                _ => true,
+            },
+            None => false,
+        }
+    }
 
 
     pub fn is_piece_or_border(&self, crd: &Option<Crd>) -> bool {
@@ -215,4 +240,5 @@ impl Board {
             None => None,
         }
     }
+    
 }

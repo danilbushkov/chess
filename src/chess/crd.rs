@@ -12,7 +12,14 @@ impl PartialEq for Crd {
     }
 }
 
-
+impl Clone for Crd {
+    fn clone(&self) -> Self {
+        Self {
+            x: self.x,
+            y: self.y,
+        }
+    }
+}
 
 
 impl Crd {
@@ -43,5 +50,7 @@ impl Crd {
     pub fn get_tuple(&self) -> (usize, usize) {
         (self.x as usize, self.y as usize)
     }
+
+    
 
 }
