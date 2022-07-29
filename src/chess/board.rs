@@ -127,7 +127,7 @@ impl Board {
     // }
 
 
-    pub fn move_piece(&mut self, location: &Crd, target: &Crd) {
+    pub fn move_piece(&mut self, location: &Crd, target: &Crd) -> bool {
         
         let mut tmp = self.take(location.get_tuple());
 
@@ -139,51 +139,53 @@ impl Board {
 
                 self.pieces[(t.get_player()/2)].remove(&location.get_tuple());
                 self.pieces[(t.get_player()/2)].insert(target.get_tuple());
+                self.set(target.get_tuple(), tmp);
+                return true;
             }
             
         }
-        self.set(target.get_tuple(), tmp);
+        
         //self.board[target.x() ][target.y() ] = tmp;
 
-
+        false
     }   
 
-    pub fn remove_piece(&mut self, target: &Crd) {
+    pub fn remove_piece(&mut self, target: &Crd) -> bool {
         let piece = self.take(target.get_tuple());
 
         if let Some(ref t) = piece {
             if t.get_player() > 0 {
                 self.pieces[(t.get_player()/2) ].remove(&target.get_tuple());
+                return true;
             } 
         }
+        false
     }
 
-    pub fn capture(&mut self, location: &Crd, target: &Crd) {
-        let m_piece = self.get_ref(location.get_tuple());
-        let r_piece = self.get_ref(target.get_tuple());
+    pub fn capture(&mut self, location: &Crd, target: &Crd) -> bool {
 
-        if let Some(m) = m_piece {
-            if let Some(r) = r_piece {
-                if m.get_player() > 0 && r.get_player() > 0 {
-                    
+        if let Some(ref m) = self.get_ref(location.get_tuple()) {
+            if let Some(ref r) = self.get_ref(target.get_tuple()) {
+                let player = m.get_player();
+                let enemy = r.get_player();
+                if player == 0 || enemy == 0 {
+                    return false;
+                }
 
-                    self.pieces[0].remove(&location.get_tuple());
-                    self.pieces[0].remove(&target.get_tuple());
-                    self.pieces[m.get_player()/2].insert(target.get_tuple());
-                } 
+                
+                let mut tmp = self.take(location.get_tuple());
+                if let Some(p) = &mut tmp {
+                    p.change_first_move();
+                    self.set(target.get_tuple(), tmp);
+                
+                    self.pieces[enemy/2].remove(&target.get_tuple());
+                    self.pieces[player/2].remove(&location.get_tuple());
+                    self.pieces[player/2].insert(target.get_tuple());
+                    return true;
+                }
             }  
         }
-
-        let tmp = self.take(location.get_tuple());
-        self.set(target.get_tuple(), tmp);
-
-        // self.board[target.x() ][target.y() ] 
-        //     = self.board[location.x() ][location.y() ].take();
-        if let Some(p) = self.get_mut(target.get_tuple()) {
-            p.change_first_move();
-        }
-        //self.board[target.x() ][target.y() ].as_mut().unwrap().change_first_move();
-
+        false
     }
     
 

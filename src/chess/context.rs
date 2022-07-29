@@ -75,9 +75,9 @@ impl Context {
                         if !enemy.is_pawn() {
                             return false;
                         }
-                        self.board.move_piece(player_crd, crd);
-                        self.board.remove_piece(&enemy_crd);
-                        return true;
+                        let m = self.board.move_piece(player_crd, crd);
+                        let r = self.board.remove_piece(&enemy_crd);
+                        return m && r;
                    }
                 }
             }
@@ -115,8 +115,7 @@ impl Context {
             if !self.board.is_player_piece(player_crd, self.player) {
                 return false;
             }
-            self.board.move_piece(player_crd, crd);
-            return true;
+            return self.board.move_piece(player_crd, crd);
         }
         
         false
@@ -128,8 +127,7 @@ impl Context {
                 return false;
             }
             if self.board.is_enemy_piece(crd, self.player) {
-                self.board.capture(player_crd, crd);
-                return true;
+                return self.board.capture(player_crd, crd);
             }
         }
 
