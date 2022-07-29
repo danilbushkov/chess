@@ -27,4 +27,10 @@ impl King {
     pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
         HashSet::new()
     }
+
+    pub fn change_first_move(&mut self) {
+        if self.first_move {
+            self.first_move = false;
+        }
+    }
 }

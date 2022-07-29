@@ -113,4 +113,23 @@ impl Pawn {
     pub fn two_cells(&self) -> bool {
         self.two_cells
     }
+
+    pub fn set_two_cells(&mut self, value: bool) {
+        self.two_cells = value;
+    }
+
+    pub fn change_first_move(&mut self) {
+        if self.first_move {
+            self.first_move = false;
+        }
+    }
+
+    pub fn change_two_calls(&mut self, location: &Crd, target: &Crd) {
+        if (location.x() - target.x()).abs() == 2 {
+            self.two_cells = true;
+        } else {
+            self.two_cells = false;
+        }
+        
+    }
 }

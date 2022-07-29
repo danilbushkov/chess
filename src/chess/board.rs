@@ -101,17 +101,39 @@ impl Board {
         
     }
 
-    pub fn move_piece(&mut self, location: &Crd, target: &Crd) {
-        let tmp = self.board[location.x() as usize][location.y() as usize].take();
+    // pub fn get_piece_mut(&mut self, crd: &Option<Crd>) -> Option<&mut Box<Piece>> {
 
-        if let Some(ref t) = tmp {
+    //     match crd {
+    //         Some(c) => self.board[c.x() as usize][c.y() as usize].as_mut(),
+    //         None => None,
+    //     }
+        
+        
+    // }
+
+    // pub fn pawn_two_cells(&mut self, location: &Crd, target: &Crd) {
+        
+        
+    // }
+
+
+    pub fn move_piece(&mut self, location: &Crd, target: &Crd) {
+        
+        let mut tmp = self.board[location.x() as usize][location.y() as usize].take();
+
+        if let Some(t) = &mut tmp {
             if t.get_player() > 0 {
+                
+                t.change_first_move();
+                t.change_two_calls(location, target);
+
                 self.pieces[(t.get_player()/2) as usize].remove(&location.get_tuple());
                 self.pieces[(t.get_player()/2) as usize].insert(target.get_tuple());
             }
             
         }
         self.board[target.x() as usize][target.y() as usize] = tmp;
+
 
     }   
 
@@ -129,10 +151,10 @@ impl Board {
         let m_piece = self.board[location.x() as usize][location.y() as usize].as_ref();
         let r_piece = self.board[target.x() as usize][target.y() as usize].as_ref();
 
-        if let Some(ref m) = m_piece {
-            if let Some(ref r) = r_piece {
+        if let Some(m) = m_piece {
+            if let Some(r) = r_piece {
                 if m.get_player() > 0 && r.get_player() > 0 {
-
+                    
                     self.pieces[(r.get_player()/2) as usize].remove(&target.get_tuple());
 
                     self.pieces[(m.get_player()/2) as usize].remove(&location.get_tuple());
@@ -143,6 +165,7 @@ impl Board {
 
         self.board[target.x() as usize][target.y() as usize] 
             = self.board[location.x() as usize][location.y() as usize].take();
+        self.board[target.x() as usize][target.y() as usize].as_mut().unwrap().change_first_move();
 
     }
     

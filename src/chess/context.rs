@@ -94,7 +94,41 @@ impl Context {
         false
     }
     
+    pub fn move_piece(&mut self, crd: &Option<Crd>) -> bool {
+        if self.board.is_piece_or_border(&crd) {
+            return false;
+        }
+        if !self.is_player_piece(&self.piece_crd) {
+            return false;
+        }
+        if let Some(target) = crd {
+            if let Some(ref player) = self.piece_crd {
+                self.board.move_piece(&player, &target);
+                return true;
+            }
+        }
+        
+        false
+    }
 
+    pub fn capture(&mut self, crd: &Option<Crd>) -> bool {
+        
+        if !self.is_player_piece(&self.piece_crd) {
+            return false;
+        }
+        
+        if self.board.is_enemy_piece(crd, self.player) {
+            if let Some(target) = crd {
+                if let Some(ref player) = self.piece_crd {
+                    self.board.capture(&player, &target);
+                    return true;
+                }
+            }
+        }
+
+
+        false
+    }
 
   //------------------------------------------
     pub fn change_player(&mut self) {
@@ -159,6 +193,11 @@ impl Context {
     pub fn get_piece(&self) -> Option<&Box<Piece>> {
         self.board.get_piece(&self.get_piece_crd())
     }
+
+    // pub fn get_piece_mut(&mut self) -> Option<&mut Box<Piece>> {
+    //     self.board.get_piece_mut(&self.get_piece_crd())
+    // }
+
     pub fn get_piece_by_crd(&self, crd: &Option<Crd>) -> Option<&Box<Piece>> {
         self.board.get_piece(crd)
     }

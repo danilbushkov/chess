@@ -28,15 +28,29 @@ impl State {
         }
 
         if chess_context.check_possible_move(&crd) {
-            if !chess_context.en_passant(&crd) {
-                
+            if Self::move_piece(chess_context, &crd) {
+                chess_context.change_state(State::SelectPieceState);
+
             }
-
-
         }
 
         Code::None
     }
+
+    fn move_piece(chess_context: &mut Context, crd: &Option<Crd>) -> bool {
+        if chess_context.en_passant(&crd) {
+            return true;
+        }
+        if chess_context.move_piece(&crd) {
+            return true;
+        }
+        if chess_context.capture(&crd) {
+            return true;
+        }
+        return false;
+    }
+
+
     
 
   

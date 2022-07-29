@@ -44,4 +44,10 @@ impl Rook {
 
         moves
     }
+
+    pub fn change_first_move(&mut self) {
+        if self.first_move {
+            self.first_move = false;
+        }
+    }
 }

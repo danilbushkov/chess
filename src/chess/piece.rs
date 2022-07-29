@@ -45,6 +45,8 @@ pub enum Piece {
 
 
 impl Piece {
+
+
     pub fn create(code: i8) -> Self {
         match code {
             1 => Piece::Pawn(Pawn::create(1)),
@@ -123,5 +125,20 @@ impl Piece {
     }
 
 
+    pub fn change_first_move(&mut self) {
+        match self {
+            Piece::Pawn(p) => p.change_first_move(),
+            Piece::King(p) => p.change_first_move(),
+            Piece::Rook(p) => p.change_first_move(),
+            _ => (),
+        }
+    }
+
+    pub fn change_two_calls(&mut self, location: &Crd, target: &Crd) {
+        match self {
+            Piece::Pawn(p) => p.change_two_calls(location, target),
+            _ => (),
+        }
+    }
 
 }
