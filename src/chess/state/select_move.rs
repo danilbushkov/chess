@@ -7,6 +7,11 @@ use crate::chess::context::Context;
 
 
 impl State {
+
+
+    pub fn select_move_actions(chess_context: &mut Context) {
+        //chess_context.change_player();
+    }
     
     pub fn select_move_handler(chess_context: &mut Context, crd: Option<Crd>) -> Code {
         
@@ -29,11 +34,13 @@ impl State {
 
         if chess_context.check_possible_move(&crd) {
             if Self::move_piece(chess_context, &crd) {
+                chess_context.change_player();
                 chess_context.change_state(State::SelectPieceState);
 
             }
         }
 
+        chess_context.change_state(State::SelectPieceState);
         Code::None
     }
 

@@ -33,6 +33,7 @@ impl Context {
     }
 
     pub fn change_state(&mut self, state: State){
+        state.action_on_change(self);
         self.state = Some(state);
     }
 
@@ -204,6 +205,10 @@ impl Context {
 
     pub fn check_moves(&self) -> bool {
         !self.moves.is_empty()
+    }
+
+    pub fn clear_moves(&mut self) {
+        self.moves.clear();
     }
 
     pub fn set_moves(&mut self, moves: HashSet<(usize, usize)>) {
