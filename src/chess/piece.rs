@@ -66,7 +66,7 @@ impl Piece {
     }
 
 
-    pub fn moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
+    pub fn moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
         match self {
             Piece::Pawn(p) => p.get_moves(crd, board),
             Piece::Rook(p) => p.get_moves(crd, board),
@@ -120,6 +120,12 @@ impl Piece {
     pub fn is_pawn(&self) -> bool {
         match self {
             Piece::Pawn(_) => true,
+            _ => false,
+        }
+    }
+    pub fn is_king(&self) -> bool {
+        match self {
+            Piece::King(_) => true,
             _ => false,
         }
     }

@@ -23,8 +23,8 @@ impl Knight {
     }
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         let direction_1 = [1,-1];
         let direction_2 = [2,-2];
         
@@ -37,7 +37,7 @@ impl Knight {
                 for crd in crds {
                     if let Some(c) = crd {
                         if !board.is_piece(&c) || board.is_enemy_piece(&c, self.player) {
-                            moves.insert(c.get_tuple());
+                            moves.insert(c);
                         }
                     }
                     // if !board.is_piece_or_border(&c) || board.is_enemy_piece(&c, self.player) {

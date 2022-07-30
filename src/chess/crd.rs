@@ -1,25 +1,9 @@
-
+#[derive(PartialEq, Eq, Hash, Clone)]
 pub struct Crd {
     x:isize,
     y:isize,
 }
 
-
-impl PartialEq for Crd {
-    fn eq(&self, other: &Self) -> bool {
-        self.x == other.x && 
-        self.y == other.y
-    }
-}
-
-impl Clone for Crd {
-    fn clone(&self) -> Self {
-        Self {
-            x: self.x,
-            y: self.y,
-        }
-    }
-}
 
 
 impl Crd {
@@ -51,6 +35,17 @@ impl Crd {
         (self.x as usize , self.y as usize )
     }
 
-    
+    pub fn create_u((x, y): (usize, usize)) -> Option<Self> { 
+        if x>7 {
+            return None;
+        }
+        if y>7 {
+            return None;
+        }
+        Some(Self {
+            x: x as isize,
+            y: y as isize,
+        })
+    }
 
 }

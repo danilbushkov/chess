@@ -9,7 +9,7 @@ pub struct Context {
     player: usize,
     board: Board,
     state: Option<State>,
-    moves: HashSet<(usize, usize)>,
+    moves: HashSet<Crd>,
     piece_crd: Option<Crd>,
     //move_crd: Option<Crd>,
 }
@@ -40,18 +40,18 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&mut self, crd: &Crd) -> HashSet<(usize, usize)> {
+    pub fn get_possible_moves(&self, crd: &Crd) -> HashSet<Crd> {
         
         match self.get_piece_by_crd(&crd) {
             Some(piece) => return piece.moves(&crd ,&self.board),
-            None => (),
+            None => HashSet::new(),
         }
-        HashSet::new()
+        
     }
 
     pub fn check_possible_move(&self, crd: &Crd) -> bool {
         
-        self.moves.contains(&crd.get_tuple())
+        self.moves.contains(&crd)
             
     }
 
@@ -155,7 +155,8 @@ impl Context {
             }   
         }
         for item in &self.moves {
-            color_board[item.0][item.1].1 = 1; 
+            let (a, b) = item.get_tuple();
+            color_board[a][b].1 = 1; 
         }
 
 
@@ -217,11 +218,20 @@ impl Context {
         self.moves.clear();
     }
 
-    pub fn set_moves(&mut self, moves: HashSet<(usize, usize)>) {
+    pub fn set_moves(&mut self, moves: HashSet<Crd>) {
         self.moves = moves;
     }
 
     pub fn is_player_piece(&self, crd: &Crd) -> bool {
         self.board.is_player_piece(crd, self.player)
+    }
+
+    pub fn get_player(&self) -> usize {
+        self.player
+    }
+
+
+    pub fn get_enemy_piece(&self, crd: &Crd) -> Option<&Box<Piece>> {
+        self.board.get_enemy_piece(crd, self.player)
     }
 }

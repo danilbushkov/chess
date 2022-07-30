@@ -21,8 +21,8 @@ fn check_move_bishop() {
     let mut board: Board = Board::create();
     board.from(board_usize);
     let crd = Crd::create(7, 2);
-    let piece = board.get_piece(&crd.unwrap()).unwrap();
+    let piece = board.get_piece(&crd.as_ref().unwrap()).unwrap();
 
 
-    //assert_eq!(piece.moves(crd.as_ref().unwrap(), &board), HashSet::from([(6, 3)]));
+    assert_eq!(piece.moves(&crd.as_ref().unwrap(), &board), HashSet::from([(6, 3)]));
 }

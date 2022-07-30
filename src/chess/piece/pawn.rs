@@ -25,18 +25,18 @@ impl Pawn {
         self.player
     }
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         
-        moves.extend(&self.possible_moves(crd, board));
-        moves.extend(&self.possible_capture(crd, board));
-        moves.extend(&self.en_passant(crd, board));
+        moves.extend(self.possible_moves(crd, board));
+        moves.extend(self.possible_capture(crd, board));
+        moves.extend(self.en_passant(crd, board));
 
         moves
     }
 
-    pub fn possible_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn possible_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1]; //black, white
 
 
@@ -47,14 +47,14 @@ impl Pawn {
 
         if let Some(c) = c {
             if !board.is_piece(&c) {
-                moves.insert(c.get_tuple());
+                moves.insert(c);
                 if self.first_move {
                     let c = Crd::create(
                         crd.x() + 2*direction[(self.player % 2) ], 
                         crd.y());
                     if let Some(c) = c {
                         if !board.is_piece(&c) {
-                            moves.insert(c.get_tuple());
+                            moves.insert(c);
                         }
                     }
                 }
@@ -74,8 +74,8 @@ impl Pawn {
         
     }
 
-    pub fn possible_capture(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn possible_capture(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1]; //black, white
         
         for b in direction {
@@ -84,7 +84,7 @@ impl Pawn {
                 crd.y() + b);
             if let Some(c) = c {
                 if board.is_enemy_piece(&c, self.player) {
-                    moves.insert(c.get_tuple());
+                    moves.insert(c);
                 }
             }
             
@@ -93,8 +93,8 @@ impl Pawn {
         moves 
     }
 
-    pub fn en_passant(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn en_passant(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1]; //black, white
         for b in direction {
             let crd_1 = Crd::create(
@@ -110,7 +110,7 @@ impl Pawn {
                             crd.y() + b);
                         if let Some(c) = crd_2 {
                             if !board.is_piece(&c) {
-                                moves.insert(c.get_tuple());
+                                moves.insert(c);
                             }
                         }
                     }

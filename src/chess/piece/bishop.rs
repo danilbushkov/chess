@@ -24,8 +24,8 @@ impl Bishop {
     }
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
-        let mut moves: HashSet<(usize, usize)> = HashSet::new();
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+        let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [(1, 1),(1, -1),(-1, 1),(-1, -1)];
 
         for (a, b) in &direction {
@@ -37,10 +37,10 @@ impl Bishop {
                         if board.is_piece(&c) {
                             search = false;
                             if board.is_enemy_piece(&c, self.player) {
-                                moves.insert(c.get_tuple());
+                                moves.insert(c);
                             }
                         } else {
-                            moves.insert(c.get_tuple());
+                            moves.insert(c.clone());
                             crd = c;
                         }
                     },

@@ -24,7 +24,7 @@ impl King {
     }
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<(usize, usize)> {
+    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
         HashSet::new()
     }
 

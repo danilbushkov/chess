@@ -6,7 +6,7 @@ use crate::chess::crd::Crd;
 pub struct Board {
     board: Vec<Vec<Option<Box<Piece>>>>,
     //0 - white, 1 - black
-    pieces: [HashSet<(usize, usize)>; 2],
+    pieces: [HashSet<Crd>; 2],
 }
 
 
@@ -64,7 +64,10 @@ impl Board {
                             )
                         );
                         if let Some(ref p) = piece {
-                            self.pieces[(p.get_player()/2) as usize].insert((i, j));
+                            if let Some(crd) = Crd::create_u((i, j)) {
+                                self.pieces[(p.get_player()/2) as usize].insert(crd);
+                            }
+                            
                         }
 
 
@@ -137,8 +140,8 @@ impl Board {
                 t.change_first_move();
                 t.change_two_calls(location, target);
 
-                self.pieces[(t.get_player()/2)].remove(&location.get_tuple());
-                self.pieces[(t.get_player()/2)].insert(target.get_tuple());
+                self.pieces[(t.get_player()/2)].remove(location);
+                self.pieces[(t.get_player()/2)].insert(target.clone());
                 self.set(target.get_tuple(), tmp);
                 return true;
             }
@@ -155,7 +158,7 @@ impl Board {
 
         if let Some(ref t) = piece {
             if t.get_player() > 0 {
-                self.pieces[(t.get_player()/2) ].remove(&target.get_tuple());
+                self.pieces[(t.get_player()/2) ].remove(target);
                 return true;
             } 
         }
@@ -178,9 +181,9 @@ impl Board {
                     p.change_first_move();
                     self.set(target.get_tuple(), tmp);
                 
-                    self.pieces[enemy/2].remove(&target.get_tuple());
-                    self.pieces[player/2].remove(&location.get_tuple());
-                    self.pieces[player/2].insert(target.get_tuple());
+                    self.pieces[enemy/2].remove(target);
+                    self.pieces[player/2].remove(location);
+                    self.pieces[player/2].insert(target.clone());
                     return true;
                 }
             }  
@@ -277,4 +280,7 @@ impl Board {
         self.board[x][y] = value;
     }
     
+    pub fn get_pieces(&self) -> &[HashSet<Crd>; 2] {
+        &self.pieces
+    }
 }

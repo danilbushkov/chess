@@ -29,6 +29,13 @@ impl State {
 
         if chess_context.check_possible_move(&crd) {
             if Self::move_piece(chess_context, &crd) {
+
+                if chess_context.is_check() {
+                    if chess_context.is_mate() {
+
+                    }
+                }
+
                 chess_context.change_player();
                 chess_context.change_state(State::SelectPieceState);
 
