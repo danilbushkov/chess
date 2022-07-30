@@ -23,7 +23,7 @@ impl Queen {
 
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+    pub fn get_moves(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [(1, 0),(0, 1),(-1, 0),(0, -1),(1, 1),(1, -1),(-1, 1),(-1, -1)];
 
@@ -35,7 +35,7 @@ impl Queen {
                     Some(c) => {
                         if board.is_piece(&c) {
                             search = false;
-                            if board.is_enemy_piece(&c, self.player) {
+                            if board.is_enemy_piece(&c, self.player) || cover {
                                 moves.insert(c);
                             }
                         } else {

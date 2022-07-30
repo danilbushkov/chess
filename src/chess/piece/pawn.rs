@@ -25,11 +25,11 @@ impl Pawn {
         self.player
     }
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+    pub fn get_moves(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         
         moves.extend(self.possible_moves(crd, board));
-        moves.extend(self.possible_capture(crd, board));
+        moves.extend(self.possible_capture(crd, board, cover));
         moves.extend(self.en_passant(crd, board));
 
         moves
@@ -74,7 +74,7 @@ impl Pawn {
         
     }
 
-    pub fn possible_capture(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+    pub fn possible_capture(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1]; //black, white
         
@@ -83,7 +83,8 @@ impl Pawn {
                 crd.x() + direction[(self.player % 2) ],
                 crd.y() + b);
             if let Some(c) = c {
-                if board.is_enemy_piece(&c, self.player) {
+                if board.is_enemy_piece(&c, self.player) || 
+                (cover && board.is_player_piece(&c, self.player)) {
                     moves.insert(c);
                 }
             }
