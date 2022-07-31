@@ -52,6 +52,7 @@ impl Context {
     }
 
     pub fn change_possible_moves(&mut self) {
+        self.moves.clear();
         for crd in self.board.get_player_pieces(self.player) {
             if let Some(piece) = self.get_player_piece(crd) {
                 let moves = piece.moves(crd, &self.board);

@@ -9,38 +9,37 @@ use crate::chess::context::Context;
 impl State {
 
 
-    pub fn select_move_actions(chess_context: &mut Context) {
+    pub fn select_move_actions(_chess_context: &mut Context) {
         //chess_context.change_player();
     }
     
     pub fn select_move_handler(chess_context: &mut Context, crd: Crd) -> Code {
 
         if chess_context.is_player_piece(&crd) {
-            //let moves = chess_context.get_possible_moves(&crd);
-            // if moves.is_empty() {
-            //     chess_context.change_state(State::SelectPieceState);
-            //     return Code::NoneMoves;
-            // }
-            //chess_context.set_moves(moves);
-            // chess_context.set_player_crd(crd);
-            // chess_context.change_state(State::MoveState);
-            // return Code::ReselectPiece;
+            if chess_context.check_possible_moves(&crd) {
+                chess_context.set_player_crd(crd);
+                chess_context.change_state(State::MoveState);
+                return Code::ReselectPiece;
+            }
+            chess_context.change_state(State::SelectPieceState);
+            return Code::NoneMoves;
         }
 
-        // if chess_context.check_possible_move(&crd) {
-        //     if Self::move_piece(chess_context, &crd) {
+        if chess_context.check_possible_move(&crd) {
+            if Self::move_piece(chess_context, &crd) {
 
-        //         if chess_context.is_check() {
-        //             if chess_context.is_mate() {
+                // if chess_context.is_check() {
+                //     if chess_context.is_mate() {
 
-        //             }
-        //         }
+                //     }
+                // }
+                
+                chess_context.change_player();
+                chess_context.change_possible_moves();
+                chess_context.change_state(State::SelectPieceState);
 
-        //         chess_context.change_player();
-        //         chess_context.change_state(State::SelectPieceState);
-
-        //     }
-        // }
+            }
+        }
 
         chess_context.change_state(State::SelectPieceState);
         Code::None

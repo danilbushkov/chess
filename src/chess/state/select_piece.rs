@@ -10,7 +10,7 @@ use crate::chess::context::Context;
 //SelectPieceState
 impl State {
     
-    pub fn select_piece_actions(chess_context: &mut Context) {
+    pub fn select_piece_actions(_chess_context: &mut Context) {
         //chess_context.clear_moves();
     }
 
