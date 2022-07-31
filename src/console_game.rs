@@ -41,7 +41,7 @@ impl ConsoleGame {
     }
 
     fn game(&mut self) {
-        self.chess.init();
+        //self.chess.init();
         let mut code: Code = Code::None;
         while match code {
             Code::Exit => false,

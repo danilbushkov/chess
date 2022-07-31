@@ -11,7 +11,7 @@ use crate::chess::context::Context;
 impl State {
     
     pub fn select_piece_actions(chess_context: &mut Context) {
-        chess_context.clear_moves();
+        //chess_context.clear_moves();
     }
 
 
@@ -23,16 +23,17 @@ impl State {
             return Code::NonePiece;
         }
 
-        let moves = chess_context.get_possible_moves(&crd);
-        if moves.is_empty() {
-            chess_context.change_state(State::SelectPieceState);
-            return Code::NoneMoves;
+        if chess_context.check_possible_moves(&crd) {
+            chess_context.set_player_crd(crd);
+            chess_context.change_state(State::MoveState);
+            return Code::None;
         }
 
-        chess_context.set_moves(moves);
-        chess_context.set_piece_crd(crd);
-        chess_context.change_state(State::MoveState);
-        Code::None
+        
+        chess_context.change_state(State::SelectPieceState);
+        return Code::NoneMoves;
+        
+        
     }
 
   

@@ -1,4 +1,5 @@
 
+use std::collections::HashMap;
 use std::collections::HashSet;
 use crate::chess::board::Board;
 use crate::chess::crd::Crd;
@@ -9,8 +10,8 @@ pub struct Context {
     player: usize,
     board: Board,
     state: Option<State>,
-    moves: HashSet<Crd>,
-    piece_crd: Option<Crd>,
+    moves: HashMap<Crd, HashSet<Crd>>,
+    player_crd: Option<Crd>,
     //move_crd: Option<Crd>,
 }
 
@@ -20,10 +21,10 @@ impl Context {
 
         Self {
             player: 1,
-            moves: HashSet::new(),
+            moves: HashMap::new(),
             board: Board::create(),
             state: Some(State::SelectPieceState),
-            piece_crd: Crd::default(),
+            player_crd: Crd::default(),
             
         }
     }
@@ -40,23 +41,49 @@ impl Context {
 
   //------------------------------------------  
 
-    pub fn get_possible_moves(&self, crd: &Crd) -> HashSet<Crd> {
+    pub fn get_possible_moves(&self, crd: &Crd) -> Option<&HashSet<Crd>> {
         
-        match self.get_piece_by_crd(&crd) {
-            Some(piece) => return piece.moves(&crd ,&self.board),
-            None => HashSet::new(),
-        }
+        // match self.get_piece_by_crd(&crd) {
+        //     Some(piece) => return piece.moves(&crd ,&self.board),
+        //     None => HashSet::new(),
+        // }
+        self.moves.get(crd)
         
     }
 
-    pub fn check_possible_move(&self, crd: &Crd) -> bool {
+    pub fn change_possible_moves(&mut self) {
+        for crd in self.board.get_player_pieces(self.player) {
+            if let Some(piece) = self.get_player_piece(crd) {
+                let moves = piece.moves(crd, &self.board);
+                if !moves.is_empty() {
+                    self.moves.insert(crd.clone(), moves);
+                    
+                }
+            }
+        }
+    }
+    pub fn check_possible_moves(&self, crd: &Crd) -> bool {
         
-        self.moves.contains(&crd)
+        self.moves.contains_key(crd) 
+ 
+    }
+
+    pub fn check_possible_move(&self, crd: &Crd) -> bool {
+        match self.player_crd {
+            Some(ref player_crd) => {
+                if let Some(set) = self.moves.get(player_crd) {
+                    return set.contains(&crd);
+                }
+                false
+            },
+            None => false,
+        }
+        
             
     }
 
     pub fn en_passant(&mut self, crd: &Crd) -> bool {
-        if let Some(player_crd) = &self.piece_crd {
+        if let Some(player_crd) = &self.player_crd {
             // if !self.board.is_player_piece(player_crd, self.player) {
             //     return false;
             // }
@@ -90,7 +117,7 @@ impl Context {
         //     return false;
         // }
         
-        //let player_crd = self.piece_crd.as_ref().unwrap();
+        //let player_crd = self.player_crd.as_ref().unwrap();
         //let target_crd = crd.as_ref().unwrap();
         //let direction = target_crd.y() - player_crd.y();
         // if direction.abs() != 1 {
@@ -111,7 +138,7 @@ impl Context {
     }
     
     pub fn move_piece(&mut self, crd: &Crd) -> bool {
-        if let Some(player_crd) = &self.piece_crd {
+        if let Some(player_crd) = &self.player_crd {
             if !self.board.is_player_piece(player_crd, self.player) {
                 return false;
             }
@@ -122,7 +149,7 @@ impl Context {
     }
 
     pub fn capture(&mut self, crd: &Crd) -> bool {
-        if let Some(player_crd) = &self.piece_crd {
+        if let Some(player_crd) = &self.player_crd {
             if !self.board.is_player_piece(player_crd, self.player) {
                 return false;
             }
@@ -154,10 +181,17 @@ impl Context {
                 color_board[i][j].0 = *item;
             }   
         }
-        for item in &self.moves {
-            let (a, b) = item.get_tuple();
-            color_board[a][b].1 = 1; 
+
+        if let Some(ref crd) = self.player_crd {
+            if let Some(set) = self.moves.get(crd) {
+                for item in set {
+                    let (a, b) = item.get_tuple();
+                    color_board[a][b].1 = 1; 
+                }
+            }
         }
+        
+        
 
 
         color_board
@@ -169,6 +203,7 @@ impl Context {
 
     pub fn init(&mut self){
         self.board.init();
+        self.change_possible_moves();
     }
 
     // pub fn get_moves(&mut self, moves: Vec<Crd>) {
@@ -179,12 +214,12 @@ impl Context {
         &self.board
     }
 
-    pub fn get_piece_crd(&self) -> &Option<Crd> {
-        &self.piece_crd
+    pub fn get_player_crd(&self) -> &Option<Crd> {
+        &self.player_crd
     }
 
-    pub fn set_piece_crd(&mut self, crd: Crd) {
-        self.piece_crd = Some(crd);
+    pub fn set_player_crd(&mut self, crd: Crd) {
+        self.player_crd = Some(crd);
     }
 
     // pub fn get_move_crd(&self) -> &Crd {
@@ -196,14 +231,14 @@ impl Context {
     // }
 
     pub fn get_piece(&self) -> Option<&Box<Piece>> {
-        match &self.get_piece_crd() {
+        match &self.get_player_crd() {
             Some(c) => self.board.get_piece(c),
             None => None,
         }
     }
 
     // pub fn get_piece_mut(&mut self) -> Option<&mut Box<Piece>> {
-    //     self.board.get_piece_mut(&self.get_piece_crd())
+    //     self.board.get_piece_mut(&self.get_player_crd())
     // }
 
     pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
@@ -218,9 +253,9 @@ impl Context {
         self.moves.clear();
     }
 
-    pub fn set_moves(&mut self, moves: HashSet<Crd>) {
-        self.moves = moves;
-    }
+    // pub fn set_moves(&mut self, moves: HashSet<Crd>) {
+    //     self.moves = moves;
+    // }
 
     pub fn is_player_piece(&self, crd: &Crd) -> bool {
         self.board.is_player_piece(crd, self.player)
@@ -233,5 +268,9 @@ impl Context {
 
     pub fn get_enemy_piece(&self, crd: &Crd) -> Option<&Box<Piece>> {
         self.board.get_enemy_piece(crd, self.player)
+    }
+
+    pub fn get_player_piece(&self, crd: &Crd) -> Option<&Box<Piece>> {
+        self.board.get_player_piece(crd, self.player)
     }
 }

@@ -245,7 +245,7 @@ impl Board {
     pub fn get_player_piece(&self, crd: &Crd, current_player: usize) -> Option<&Box<Piece>> {
         match self.get_ref(crd.get_tuple()) {
             Some(ref p) => {
-                if p.get_player() == [1, 2][(current_player % 2)] {
+                if p.get_player() == current_player {
                     return Some(p);
                 }
                 None
@@ -282,5 +282,8 @@ impl Board {
     
     pub fn get_pieces(&self) -> &[HashSet<Crd>; 2] {
         &self.pieces
+    }
+    pub fn get_player_pieces(&self, player: usize) -> &HashSet<Crd> {
+        &self.pieces[player/2]
     }
 }

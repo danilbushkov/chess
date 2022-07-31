@@ -18,14 +18,18 @@ use crate::chess::context::Context;
 pub struct Chess {
     context: Context,
 
-    
 }
 
 impl Chess {
 
     pub fn create() -> Self {
+
+        let mut context = Context::create();
+        context.init();
+        
+
         Self{
-            context: Context::create(),
+            context,
         }
     }
 
@@ -50,9 +54,9 @@ impl Chess {
         self.context.get_color_board()
     }
 
-    pub fn init(&mut self){
-        self.context.init();
-    }
+    // pub fn init(&mut self){
+    //     //self.context.init();
+    // }
 
     
 
