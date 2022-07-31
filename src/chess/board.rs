@@ -98,36 +98,7 @@ impl Board {
         self.get_ref(crd.get_tuple())
     }
 
-    // pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
-
-    //     self.board[crd.x() ][crd.y() ].as_ref()
-        
-    // }
-
-    // pub fn is_enemy_piece_by_crd(&self, crd: &Crd, current_player: isize) -> bool {
-    //     match self.get_piece_by_crd(crd) {
-    //         Some(p) => match **p {
-    //             Piece::None => false,
-    //             ref other => other.get_player() == [1, 2][(current_player % 2) ],
-    //         },
-    //         None => false,
-    //     }
-    // }
-
-    // pub fn get_piece_mut(&mut self, crd: &Crd) -> Option<&mut Box<Piece>> {
-
-    //     match crd {
-    //         Some(c) => self.board[c.x() ][c.y() ].as_mut(),
-    //         None => None,
-    //     }
-        
-        
-    // }
-
-    // pub fn pawn_two_cells(&mut self, location: &Crd, target: &Crd) {
-        
-        
-    // }
+   
 
 
     pub fn move_piece(&mut self, location: &Crd, target: &Crd) -> bool {
@@ -148,7 +119,6 @@ impl Board {
             
         }
         
-        //self.board[target.x() ][target.y() ] = tmp;
 
         false
     }   
@@ -212,12 +182,42 @@ impl Board {
     }
 
 
-    // pub fn is_piece_or_border(&self, crd: &Crd) -> bool {
-    //     if let None = crd {
-    //         return true;
-    //     }
-    //     self.is_piece(crd)
-    // }
+    pub fn get_player_moves(&mut self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
+        if let Some(piece) = self.get_player_piece(crd, current_player) {
+            let moves = piece.moves(crd, self);
+            if !moves.is_empty() && !piece.is_king() {
+                let threats = self.threatening_player_king(current_player);
+                if threats.is_empty() {
+                    let tmp = self.take(crd.get_tuple());
+
+                    self.set(crd.get_tuple(), tmp);
+                } else if threats.len() == 1 {
+
+                }
+                
+            }
+            return moves;
+        }
+        HashSet::new()
+
+    }
+
+
+    pub fn threatening_player_king(&self, current_player: usize) -> HashSet<Crd> {
+        let mut pieces = HashSet::new();
+        for item in &self.pieces[current_player/2] {
+            if let Some(piece) = self.get_enemy_piece(item, current_player) {
+                for cell in piece.moves(item, self) {
+                    if let Some(piece) = self.get_player_piece(&cell, current_player) {
+                        if piece.is_king() {
+                            pieces.insert(item.clone());
+                        }
+                    }
+                }
+            }
+        }
+        pieces
+    }
 
     pub fn is_enemy_piece(&self, crd: &Crd, current_player: usize) -> bool {
         match self.get_piece(crd) {
