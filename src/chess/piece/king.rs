@@ -62,7 +62,7 @@ impl King {
 
         for a in direction {
             for b in direction {
-                if let Some(move_crd) = Crd::create(crd.x()+a, crd.x()+b) {
+                if let Some(move_crd) = Crd::create(crd.x()+a, crd.y()+b) {
                     if !board.is_player_piece(&move_crd, self.player) {
                         if !enemy_attacks.contains(&move_crd) {
                             moves.insert(move_crd);
@@ -81,8 +81,11 @@ impl King {
     pub fn castling(&self, crd: &Crd, board: &Board, enemy_attacks: HashSet<Crd>) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
 
-        
         let x = [7, 0][self.player/2];
+
+        if x != crd.x() {
+            return moves;
+        }
 
         for (y, d) in [(0, 1), (7, -1)] {
             if let Some(rook_crd) = Crd::create(x, y) {

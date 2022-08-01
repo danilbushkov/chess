@@ -5,7 +5,7 @@ use chess::chess::crd::Crd;
     
 
 #[test]
-fn check_move_bishop() {
+fn check1() {
     let board_usize: [[usize; 8]; 8] = 
         [
             [4, 6, 8, 0, 12,8, 6, 4],

@@ -4,6 +4,7 @@ use std::io;
 use chess::chess::Chess;
 use chess::chess::code::Code;
 use chess::chess::crd::Crd;
+use rand::Rng;
 
 
 pub struct ConsoleGame {
@@ -25,7 +26,7 @@ impl ConsoleGame {
         self.clear_screen();
         let mut code: usize = 0;
 
-        while code != 2 {
+        while code != 3 {
             code = self.menu();
 
             self.code_selection(code);
@@ -33,9 +34,12 @@ impl ConsoleGame {
         }
     }
 
+    
+
     fn code_selection(&mut self, code: usize){
         match code {
             1 => self.game(),
+            2 => self.bot(),
             _ => (),
         }
     }
@@ -56,11 +60,48 @@ impl ConsoleGame {
                 Code::ReselectPiece => "ReselectPiece",
                 Code::Exit => "exit",
                 Code::None => "none",
+                Code::ChangePlayer => "Change player",
             }); 
         
         }
-    
     }
+
+    pub fn bot(&mut self){
+        let mut code: Code = Code::None;
+        let mut player = 1;
+        while match code {
+            Code::Exit => false,
+            _ => true,
+        } { 
+            
+            if player == 1 {
+                code = self.game_move();
+            } else {
+                let x = rand::thread_rng().gen_range(0..=7);
+                let y = rand::thread_rng().gen_range(0..=7);
+                code = self.chess.handler(Crd::create(x, y));
+            }
+            
+            if let Code::ChangePlayer = code {
+                player = [1, 2][player%2];
+            }
+            if player == 1 { 
+                println!("{}", match code {
+                    Code::IncorrectCrd => "incorrect crd",
+                    Code::NonePiece => "none piece",
+                    Code::NoneState => "none state",
+                    Code::NoneMoves => "none moves",
+                    Code::ReselectPiece => "ReselectPiece",
+                    Code::Exit => "exit",
+                    Code::None => "none",
+                    Code::ChangePlayer => "Change player",
+                }); 
+            }
+            
+        
+        }
+    }
+
 
     fn game_move(&mut self) -> Code {
         println!();
@@ -185,7 +226,8 @@ impl ConsoleGame {
         
         println!("Menu:");
         println!("1 - play");
-        println!("2 - exit");
+        println!("2 - bot");
+        println!("3 - exit");
         println!("Enter the item: ");
 
         self.select_menu()

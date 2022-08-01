@@ -4,6 +4,7 @@ pub enum Code{
     NoneState,
     NoneMoves,
     ReselectPiece,
+    ChangePlayer,
     Exit,
     None,
     

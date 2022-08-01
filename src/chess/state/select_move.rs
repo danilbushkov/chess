@@ -37,7 +37,7 @@ impl State {
                 chess_context.change_player();
                 chess_context.change_possible_moves();
                 chess_context.change_state(State::SelectPieceState);
-
+                return Code::ChangePlayer;
             }
         }
 
