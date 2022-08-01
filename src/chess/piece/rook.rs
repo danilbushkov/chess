@@ -43,4 +43,8 @@ impl Rook {
             self.first_move = false;
         }
     }
+
+    pub fn first_move(&self) -> bool {
+        self.first_move
+    }
 }

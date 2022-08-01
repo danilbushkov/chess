@@ -285,6 +285,34 @@ impl Board {
     }
 
 
+    pub fn get_enemy_attacks(&self, current_player: usize) -> HashSet<Crd> {
+        let mut cells: HashSet<Crd> = HashSet::new();
+        for enemy_crd in self.get_enemy_pieces(current_player) {
+            if let Some(enemy) = self.get_enemy_piece(enemy_crd, current_player) {
+                cells.extend(enemy.attacks(enemy_crd, self));
+            }
+        }
+
+        cells
+    }
+
+    // pub fn move_king(&self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
+    //     let mut moves = HashSet::new();
+    //     if let Some(player) = self.get_player_piece(crd, current_player) {
+    //         if player.is_king() {
+    //             moves = player.moves(crd, self);
+
+    //         }
+    //     }
+        
+
+    //     moves
+    // }
+
+
+
+
+
     pub fn is_enemy_piece(&self, crd: &Crd, current_player: usize) -> bool {
         match self.get_piece(crd) {
             Some(p) => match **p {

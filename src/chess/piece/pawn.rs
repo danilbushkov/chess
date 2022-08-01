@@ -149,4 +149,8 @@ impl Pawn {
         }
         
     }
+
+    pub fn first_move(&self) -> bool {
+        self.first_move
+    }
 }

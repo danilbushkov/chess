@@ -46,6 +46,9 @@ impl State {
     }
 
     fn move_piece(chess_context: &mut Context, crd: &Crd) -> bool {
+        if chess_context.castling(&crd) {
+            return true;
+        }
         if chess_context.en_passant(&crd) {
             return true;
         }

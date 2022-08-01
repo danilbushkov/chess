@@ -141,12 +141,28 @@ impl Piece {
             _ => false,
         }
     }
+    pub fn is_rook(&self) -> bool {
+        match self {
+            Piece::Rook(_) => true,
+            _ => false,
+        }
+    }
 
     pub fn is_queen_or_bishop_or_rook(&self) -> bool {
         match self {
             Piece::Queen(_) => true,
             Piece::Bishop(_) => true,
             Piece::Rook(_) => true,
+            _ => false,
+        }
+    }
+
+
+    pub fn first_move(&self) -> bool {
+        match self {
+            Piece::Pawn(p) => p.first_move(),
+            Piece::King(p) => p.first_move(),
+            Piece::Rook(p) => p.first_move(),
             _ => false,
         }
     }

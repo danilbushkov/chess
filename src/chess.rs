@@ -1,7 +1,6 @@
 
 pub mod piece;
 pub mod board;
-mod algorithm;
 mod context;
 pub mod state;
 pub mod code;

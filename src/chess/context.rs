@@ -90,6 +90,38 @@ impl Context {
             
     }
 
+
+    pub fn castling(&mut self, crd: &Crd) -> bool {
+        if let Some(player_crd) = &self.player_crd {
+            if let Some(player) = self.board.get_player_piece(player_crd, self.player) {
+                if player.is_king() {
+                    if (crd.y() - player_crd.y()).abs() > 1 {
+                        let d = (crd.y() - player_crd.y()).signum();
+                        let rook_crd = {
+                            if d > 0 {
+                                Crd::create(crd.x(), 7)
+                            } else {
+                                Crd::create(crd.x(), 0)
+                            }   
+                        };
+                        if let Some(rc) = rook_crd {
+                            if let Some(t) = Crd::create(crd.x(), crd.y()-d) {
+                                if self.board.move_piece(player_crd, crd) {
+                                    return self.board.move_piece(&rc, &t);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        false
+    }
+
+
+
+
     pub fn en_passant(&mut self, crd: &Crd) -> bool {
         if let Some(player_crd) = &self.player_crd {
             // if !self.board.is_player_piece(player_crd, self.player) {
@@ -110,9 +142,10 @@ impl Context {
                         if !enemy.is_pawn() {
                             return false;
                         }
-                        let m = self.board.move_piece(player_crd, crd);
-                        let r = self.board.remove_piece(&enemy_crd);
-                        return m && r;
+                        if self.board.move_piece(player_crd, crd) {
+                            return self.board.remove_piece(&enemy_crd);
+                        }
+                        
                    }
                 }
             }
