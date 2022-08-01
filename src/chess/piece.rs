@@ -18,6 +18,7 @@ mod knight;
 mod pawn;
 mod queen;
 mod rook;
+pub mod trajectory;
 
 use std::collections::HashSet;
 use crate::chess::crd::Crd;
@@ -28,7 +29,6 @@ use crate::chess::piece::pawn::Pawn;
 use crate::chess::piece::queen::Queen;
 use crate::chess::piece::rook::Rook;
 use crate::chess::board::Board;
-
 
 
 
@@ -138,6 +138,15 @@ impl Piece {
     pub fn is_king(&self) -> bool {
         match self {
             Piece::King(_) => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_queen_or_bishop_or_rook(&self) -> bool {
+        match self {
+            Piece::Queen(_) => true,
+            Piece::Bishop(_) => true,
+            Piece::Rook(_) => true,
             _ => false,
         }
     }

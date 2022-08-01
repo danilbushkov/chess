@@ -51,17 +51,24 @@ impl Context {
         
     }
 
+    pub fn get_player_moves(&mut self, crd: &Crd) -> HashSet<Crd> {
+        self.board.get_player_moves(crd, self.player)
+    }
+
     pub fn change_possible_moves(&mut self) {
-        self.moves.clear();
-        for crd in self.board.get_player_pieces(self.player) {
-            if let Some(piece) = self.get_player_piece(crd) {
-                let moves = piece.moves(crd, &self.board);
-                if !moves.is_empty() {
-                    self.moves.insert(crd.clone(), moves);
+        self.moves = self.board.get_possible_moves(self.player)
+        // self.moves.clear();
+        // let pieces = self.board.get_player_pieces(self.player);
+        // for crd in pieces {
+        //     if self.is_player_piece(crd) {
+        //         // let moves = piece.moves(crd, &self.board);
+        //         let moves = self.get_player_moves(crd);
+        //         if !moves.is_empty() {
+        //             self.moves.insert(crd.clone(), moves);
                     
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
     }
     pub fn check_possible_moves(&self, crd: &Crd) -> bool {
         

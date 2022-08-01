@@ -3,6 +3,7 @@ use std::collections::HashSet;
 
 use crate::chess::crd::Crd;
 use crate::chess::board::Board;
+use crate::chess::piece::Piece;
 
 
 
@@ -28,27 +29,8 @@ impl Rook {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [(1, 0),(0, 1),(-1, 0),(0, -1)];
 
-        for (a, b) in &direction {
-            let mut search = true;
-            let mut crd = crd.clone();
-            while search {
-                match Crd::create(crd.x() + *a, crd.y() + *b) {
-                    Some(c) => {
-                        if board.is_piece(&c) {
-                            search = false;
-                            if board.is_enemy_piece(&c, self.player) || cover {
-                                moves.insert(c);
-                            }
-                        } else {
-                            moves.insert(c.clone());
-                            crd = c;
-                        }
-                    },
-                    None => {
-                        search = false;
-                    },
-                }
-            }
+        for d in &direction {
+            Piece::get_trajectory(&mut moves, crd, board, d, self.player, cover);
 
         }
 

@@ -1,7 +1,9 @@
+use std::collections::HashMap;
 use std::collections::HashSet;
 
 use crate::chess::piece::Piece;
 use crate::chess::crd::Crd;
+use crate::chess::piece::trajectory::Piece as Trajectory;
 
 pub struct Board {
     board: Vec<Vec<Option<Box<Piece>>>>,
@@ -181,19 +183,44 @@ impl Board {
         }
     }
 
+    pub fn _check_pin(&mut self, player_crd: &Crd, threats: &HashMap<Crd, HashSet<Crd>>) -> bool {
+        for (_, way) in threats {
+            for crd in way {
+                if player_crd == crd {
+                    return true;
+                }
+            }
+        }
 
+        false
+    }
+
+    pub fn get_match(&self, moves: &mut HashSet<Crd>, threats: &Vec<HashSet<Crd>>) {
+        let mut tmp_moves: HashSet<Crd> = HashSet::new();
+        for way in threats {
+            for crd in way {
+                if moves.contains(&crd) {
+                    tmp_moves.insert(crd.clone());
+                }
+            }
+        }
+        *moves = tmp_moves;
+    }
     pub fn get_player_moves(&mut self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
         if let Some(piece) = self.get_player_piece(crd, current_player) {
-            let moves = piece.moves(crd, self);
+            let mut moves = piece.moves(crd, self);
             if !moves.is_empty() && !piece.is_king() {
+                let tmp = self.take(crd.get_tuple());
+        
+
                 let threats = self.threatening_player_king(current_player);
-                if threats.is_empty() {
-                    let tmp = self.take(crd.get_tuple());
-
-                    self.set(crd.get_tuple(), tmp);
+                if threats.len() > 1 {
+                    moves = HashSet::new();
                 } else if threats.len() == 1 {
-
+                    self.get_match(&mut moves, &threats);
                 }
+
+                self.set(crd.get_tuple(), tmp);
                 
             }
             return moves;
@@ -203,14 +230,17 @@ impl Board {
     }
 
 
-    pub fn threatening_player_king(&self, current_player: usize) -> HashSet<Crd> {
-        let mut pieces = HashSet::new();
-        for item in &self.pieces[current_player/2] {
-            if let Some(piece) = self.get_enemy_piece(item, current_player) {
-                for cell in piece.moves(item, self) {
-                    if let Some(piece) = self.get_player_piece(&cell, current_player) {
+    pub fn threatening_player_king(&self, current_player: usize) -> Vec<HashSet<Crd>> {
+        let mut pieces = Vec::new();
+        for enemy_crd in &self.pieces[current_player/2] {
+            if let Some(piece) = self.get_enemy_piece(enemy_crd, current_player) {
+                for player_crd in piece.moves(enemy_crd, self) {
+                    if let Some(piece) = self.get_player_piece(&player_crd, current_player) {
                         if piece.is_king() {
-                            pieces.insert(item.clone());
+
+                            pieces.push(self.way_to_king(&player_crd, enemy_crd, current_player));
+
+                            //pieces.insert(item.clone());
                         }
                     }
                 }
@@ -218,6 +248,41 @@ impl Board {
         }
         pieces
     }
+
+
+    pub fn way_to_king(&self ,king_crd: &Crd, enemy_crd: &Crd, current_player: usize) -> HashSet<Crd> {
+        let mut way: HashSet<Crd> = HashSet::new();
+        if let Some(enemy) = self.get_enemy_piece(enemy_crd, current_player) {
+            if enemy.is_queen_or_bishop_or_rook() {
+                let a = (king_crd.x() - enemy_crd.x()).signum();
+                let b = (king_crd.y() - enemy_crd.y()).signum();
+                let d = (a, b);
+                Trajectory::get_trajectory(&mut way, enemy_crd, &self, &d, current_player, false);
+                way.remove(&king_crd);
+            }
+            way.insert(enemy_crd.clone());
+        }
+
+        way
+    }
+
+
+    pub fn get_possible_moves(&mut self, current_player: usize) -> HashMap<Crd, HashSet<Crd>> {
+        let mut players_moves: HashMap<Crd, HashSet<Crd>> = HashMap::new();
+        let pieces = self.pieces[current_player/2].clone();
+
+        for crd in pieces {
+            if self.is_player_piece(&crd, current_player) {
+                // let moves = piece.moves(crd, &self.board);
+                let moves = self.get_player_moves(&crd, current_player);
+                if !moves.is_empty() {
+                    players_moves.insert(crd.clone(), moves);
+                }
+            }
+        }
+        players_moves
+    }
+
 
     pub fn is_enemy_piece(&self, crd: &Crd, current_player: usize) -> bool {
         match self.get_piece(crd) {
