@@ -210,6 +210,7 @@ impl Board {
         if let Some(piece) = self.get_player_piece(crd, current_player) {
             let mut moves = piece.moves(crd, self);
             if !moves.is_empty() && !piece.is_king() {
+                
                 let tmp = self.take(crd.get_tuple());
         
 
@@ -232,12 +233,12 @@ impl Board {
 
     pub fn threatening_player_king(&self, current_player: usize) -> Vec<HashSet<Crd>> {
         let mut pieces = Vec::new();
-        for enemy_crd in &self.pieces[current_player/2] {
+        for enemy_crd in self.get_enemy_pieces(current_player) {
             if let Some(piece) = self.get_enemy_piece(enemy_crd, current_player) {
                 for player_crd in piece.moves(enemy_crd, self) {
                     if let Some(piece) = self.get_player_piece(&player_crd, current_player) {
                         if piece.is_king() {
-
+                            
                             pieces.push(self.way_to_king(&player_crd, enemy_crd, current_player));
 
                             //pieces.insert(item.clone());
@@ -269,7 +270,7 @@ impl Board {
 
     pub fn get_possible_moves(&mut self, current_player: usize) -> HashMap<Crd, HashSet<Crd>> {
         let mut players_moves: HashMap<Crd, HashSet<Crd>> = HashMap::new();
-        let pieces = self.pieces[current_player/2].clone();
+        let pieces = self.get_player_pieces(current_player).clone();
 
         for crd in pieces {
             if self.is_player_piece(&crd, current_player) {
@@ -350,5 +351,8 @@ impl Board {
     }
     pub fn get_player_pieces(&self, player: usize) -> &HashSet<Crd> {
         &self.pieces[player/2]
+    }
+    pub fn get_enemy_pieces(&self, player: usize) -> &HashSet<Crd> {
+        &self.pieces[player%2]
     }
 }

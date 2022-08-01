@@ -1,4 +1,4 @@
-use chess::chess::piece::Piece;
+
 use chess::chess::board::Board;
 use std::collections::HashSet;
 use chess::chess::crd::Crd;
@@ -22,7 +22,13 @@ fn check_move_bishop() {
     board.from(board_usize);
     let crd = Crd::create(7, 2);
     let piece = board.get_piece(&crd.as_ref().unwrap()).unwrap();
+    let result = HashSet::from(
+        [ 
+            Crd::create_u((6, 3)).unwrap(),
+        ]
+    );
 
 
-    assert_eq!(piece.moves(&crd.as_ref().unwrap(), &board), HashSet::from([(6, 3)]));
+
+    assert_eq!(piece.moves(&crd.as_ref().unwrap(), &board), result);
 }
