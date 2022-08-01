@@ -69,22 +69,22 @@ impl Piece {
     pub fn moves(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
         match self {
             Piece::Pawn(p) => p.get_moves(crd, board, false),
-            Piece::Rook(p) => p.get_moves(crd, board, false),
+            Piece::Rook(p) => p.get_moves(crd, board, None),
             Piece::Knight(p) => p.get_moves(crd, board, false),
-            Piece::Bishop(p) => p.get_moves(crd, board, false),
-            Piece::Queen(p) => p.get_moves(crd, board, false),
+            Piece::Bishop(p) => p.get_moves(crd, board, None),
+            Piece::Queen(p) => p.get_moves(crd, board, None),
             Piece::King(p) => p.get_moves(crd, board, false),
             Piece::None => HashSet::new(),
         }
     }
 
-    pub fn attacks(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+    pub fn attacks(&self, crd: &Crd, board: &Board, skip: &Crd) -> HashSet<Crd> {
         match self {
             Piece::Pawn(p) => p.get_moves(crd, board, true),
-            Piece::Rook(p) => p.get_moves(crd, board, true),
+            Piece::Rook(p) => p.get_moves(crd, board, Some(skip)),
             Piece::Knight(p) => p.get_moves(crd, board, true),
-            Piece::Bishop(p) => p.get_moves(crd, board, true),
-            Piece::Queen(p) => p.get_moves(crd, board, true),
+            Piece::Bishop(p) => p.get_moves(crd, board, Some(skip)),
+            Piece::Queen(p) => p.get_moves(crd, board, Some(skip)),
             Piece::King(p) => p.get_moves(crd, board, true),
             Piece::None => HashSet::new(),
         }

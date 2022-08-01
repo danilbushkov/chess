@@ -23,12 +23,12 @@ impl Queen {
 
 
 
-    pub fn get_moves(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
+    pub fn get_moves(&self, crd: &Crd, board: &Board, skip: Option<&Crd>) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [(1, 0),(0, 1),(-1, 0),(0, -1),(1, 1),(1, -1),(-1, 1),(-1, -1)];
 
         for d in &direction {
-            Piece::get_trajectory(&mut moves, crd, board, d, self.player, cover);
+            Piece::get_trajectory(&mut moves, crd, board, d, self.player, skip);
 
         }
 

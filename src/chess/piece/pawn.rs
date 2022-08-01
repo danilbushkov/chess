@@ -28,9 +28,12 @@ impl Pawn {
     pub fn get_moves(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         
-        moves.extend(self.possible_moves(crd, board));
+        if !cover {
+            moves.extend(self.possible_moves(crd, board));
+            moves.extend(self.en_passant(crd, board));
+        }
         moves.extend(self.possible_capture(crd, board, cover));
-        moves.extend(self.en_passant(crd, board));
+        
 
         moves
     }

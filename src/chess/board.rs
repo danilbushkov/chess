@@ -206,23 +206,18 @@ impl Board {
         }
         *moves = tmp_moves;
     }
-    pub fn get_player_moves(&mut self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
+    pub fn get_player_moves(&self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
         if let Some(piece) = self.get_player_piece(crd, current_player) {
             let mut moves = piece.moves(crd, self);
             if !moves.is_empty() && !piece.is_king() {
                 
-                let tmp = self.take(crd.get_tuple());
-        
-
-                let threats = self.threatening_player_king(current_player);
+                let threats = self.threatening_player_king(crd ,current_player);
                 if threats.len() > 1 {
                     moves = HashSet::new();
                 } else if threats.len() == 1 {
                     self.get_match(&mut moves, &threats);
                 }
 
-                self.set(crd.get_tuple(), tmp);
-                
             }
             return moves;
         }
@@ -231,7 +226,7 @@ impl Board {
     }
 
 
-    pub fn threatening_player_king(&self, current_player: usize) -> Vec<HashSet<Crd>> {
+    pub fn threatening_player_king(&self, skip: &Crd, current_player: usize) -> Vec<HashSet<Crd>> {
         let mut pieces = Vec::new();
         for enemy_crd in self.get_enemy_pieces(current_player) {
             if let Some(piece) = self.get_enemy_piece(enemy_crd, current_player) {
@@ -239,9 +234,9 @@ impl Board {
                     if let Some(piece) = self.get_player_piece(&player_crd, current_player) {
                         if piece.is_king() {
                             
-                            pieces.push(self.way_to_king(&player_crd, enemy_crd, current_player));
+                            pieces.push(self.way_to_king(&player_crd, enemy_crd, skip, current_player));
 
-                            //pieces.insert(item.clone());
+                            
                         }
                     }
                 }
@@ -251,30 +246,30 @@ impl Board {
     }
 
 
-    pub fn way_to_king(&self ,king_crd: &Crd, enemy_crd: &Crd, current_player: usize) -> HashSet<Crd> {
-        let mut way: HashSet<Crd> = HashSet::new();
+    pub fn way_to_king(&self, king_crd: &Crd, enemy_crd: &Crd, skip: &Crd, current_player: usize) -> HashSet<Crd> {
+        let mut trajectory: HashSet<Crd> = HashSet::new();
         if let Some(enemy) = self.get_enemy_piece(enemy_crd, current_player) {
             if enemy.is_queen_or_bishop_or_rook() {
                 let a = (king_crd.x() - enemy_crd.x()).signum();
                 let b = (king_crd.y() - enemy_crd.y()).signum();
                 let d = (a, b);
-                Trajectory::get_trajectory(&mut way, enemy_crd, &self, &d, current_player, false);
-                way.remove(&king_crd);
+                Trajectory::get_trajectory(&mut trajectory, enemy_crd, &self, &d, current_player, Some(skip));
+                trajectory.remove(&king_crd);
             }
-            way.insert(enemy_crd.clone());
+            trajectory.insert(enemy_crd.clone());
         }
 
-        way
+        trajectory
     }
 
 
     pub fn get_possible_moves(&mut self, current_player: usize) -> HashMap<Crd, HashSet<Crd>> {
         let mut players_moves: HashMap<Crd, HashSet<Crd>> = HashMap::new();
-        let pieces = self.get_player_pieces(current_player).clone();
+        let pieces = self.get_player_pieces(current_player);
 
         for crd in pieces {
             if self.is_player_piece(&crd, current_player) {
-                // let moves = piece.moves(crd, &self.board);
+                
                 let moves = self.get_player_moves(&crd, current_player);
                 if !moves.is_empty() {
                     players_moves.insert(crd.clone(), moves);
@@ -285,29 +280,18 @@ impl Board {
     }
 
 
-    pub fn get_enemy_attacks(&self, current_player: usize) -> HashSet<Crd> {
+    pub fn get_enemy_attacks(&self, current_player: usize, skip: &Crd) -> HashSet<Crd> {
         let mut cells: HashSet<Crd> = HashSet::new();
         for enemy_crd in self.get_enemy_pieces(current_player) {
             if let Some(enemy) = self.get_enemy_piece(enemy_crd, current_player) {
-                cells.extend(enemy.attacks(enemy_crd, self));
+                cells.extend(enemy.attacks(enemy_crd, self, skip));
             }
         }
 
         cells
     }
 
-    // pub fn move_king(&self, crd: &Crd, current_player: usize) -> HashSet<Crd> {
-    //     let mut moves = HashSet::new();
-    //     if let Some(player) = self.get_player_piece(crd, current_player) {
-    //         if player.is_king() {
-    //             moves = player.moves(crd, self);
-
-    //         }
-    //     }
-        
-
-    //     moves
-    // }
+   
 
 
 

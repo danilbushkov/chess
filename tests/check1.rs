@@ -25,7 +25,7 @@ fn check_move_bishop() {
     let moves = board.get_possible_moves(1);
 
 
-    ;
+    
     let result1 = vec![HashSet::from([
         Crd::create(4, 0).unwrap(),
         Crd::create(4, 1).unwrap(),
@@ -35,7 +35,7 @@ fn check_move_bishop() {
 
     
 
-    assert_eq!(board.threatening_player_king(1), result1);
+    assert_eq!(board.threatening_player_king(&Crd::create(3, 2).unwrap(),1), result1);
 
     let result = HashMap::from([   
         ( Crd::create(3, 2).unwrap(), 
@@ -50,6 +50,16 @@ fn check_move_bishop() {
                                        Crd::create(4, 0).unwrap()])),
         ( Crd::create(6, 2).unwrap(), 
                         HashSet::from([Crd::create(4, 2).unwrap()])),
+        ( Crd::create(4, 4).unwrap(), 
+                        HashSet::from([Crd::create(3, 3).unwrap(),
+                                       Crd::create(3, 4).unwrap(),
+                                       Crd::create(3, 5).unwrap(),
+                                       Crd::create(5, 3).unwrap(),
+                                       Crd::create(5, 4).unwrap(),
+                                       Crd::create(5, 5).unwrap(),
+                        
+                        
+                        ]))
         
     ]);
 

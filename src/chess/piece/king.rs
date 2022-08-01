@@ -27,7 +27,7 @@ impl King {
     pub fn get_moves(&self, crd: &Crd, board: &Board, cover: bool) -> HashSet<Crd> {
         
         if cover {
-            self.attacks(crd, board)
+            self.attacks(crd)
         } else {
             self.limited_move(crd, board)
         }
@@ -37,7 +37,7 @@ impl King {
 
 
 
-    pub fn attacks(&self, crd: &Crd, board: &Board) -> HashSet<Crd> {
+    pub fn attacks(&self, crd: &Crd) -> HashSet<Crd> {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1, 0];
         for a in direction {
@@ -58,7 +58,7 @@ impl King {
         let mut moves: HashSet<Crd> = HashSet::new();
         let direction = [1, -1, 0];
 
-        let enemy_attacks = board.get_enemy_attacks(self.player);
+        let enemy_attacks = board.get_enemy_attacks(self.player, crd);
 
         for a in direction {
             for b in direction {
@@ -88,7 +88,7 @@ impl King {
             if let Some(rook_crd) = Crd::create(x, y) {
                 if let Some(piece) = board.get_player_piece(&rook_crd, self.player) {
                     if piece.is_rook() && piece.first_move() {
-                        
+
                         let mut tmp = Crd::create(rook_crd.x(), rook_crd.y()+d);
                         let mut castling = true;
                         for _ in 1..(rook_crd.y() - crd.y()).abs() {
