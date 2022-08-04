@@ -63,16 +63,7 @@ impl Pawn {
                 }
             }
         }
-        // if !board.is_piece_or_border(&c) {
-        //     moves.insert(c.unwrap().get_tuple());
-            
-        //     if self.first_move {
-                
-        //         if !board.is_piece_or_border(&c) {
-        //             moves.insert(c.unwrap().get_tuple());
-        //         }
-        //     }
-        // }
+        
         moves
         
     }

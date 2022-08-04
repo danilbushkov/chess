@@ -123,13 +123,7 @@ impl ConsoleGame {
             match self.args_to_usize(&args) {
                 Some(n) => {
                         return self.chess.handler(Crd::create(n.0 as isize, n.1 as isize));
-                        // Some(crd) => {
-                        //     return self.chess.handler(crd);
-                        // }
-                        // None => {
-                        //     self.println_error("Coordinates are incorrect");
-                        //     return Code::None;
-                        // }
+                        
                     
                 }
                 None => {

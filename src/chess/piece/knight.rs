@@ -42,9 +42,7 @@ impl Knight {
                             moves.insert(c);
                         }
                     }
-                    // if !board.is_piece_or_border(&c) || board.is_enemy_piece(&c, self.player) {
-                    //     moves.insert(c.unwrap().get_tuple());
-                    // } 
+                    
                 }
             }
         } 

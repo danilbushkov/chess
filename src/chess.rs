@@ -53,9 +53,7 @@ impl Chess {
         self.context.get_color_board()
     }
 
-    // pub fn init(&mut self){
-    //     //self.context.init();
-    // }
+    
 
     
 

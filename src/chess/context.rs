@@ -12,7 +12,6 @@ pub struct Context {
     state: Option<State>,
     moves: HashMap<Crd, HashSet<Crd>>,
     player_crd: Option<Crd>,
-    //move_crd: Option<Crd>,
 }
 
 
@@ -43,10 +42,7 @@ impl Context {
 
     pub fn get_possible_moves(&self, crd: &Crd) -> Option<&HashSet<Crd>> {
         
-        // match self.get_piece_by_crd(&crd) {
-        //     Some(piece) => return piece.moves(&crd ,&self.board),
-        //     None => HashSet::new(),
-        // }
+        
         self.moves.get(crd)
         
     }
@@ -57,18 +53,7 @@ impl Context {
 
     pub fn change_possible_moves(&mut self) {
         self.moves = self.board.get_possible_moves(self.player)
-        // self.moves.clear();
-        // let pieces = self.board.get_player_pieces(self.player);
-        // for crd in pieces {
-        //     if self.is_player_piece(crd) {
-        //         // let moves = piece.moves(crd, &self.board);
-        //         let moves = self.get_player_moves(crd);
-        //         if !moves.is_empty() {
-        //             self.moves.insert(crd.clone(), moves);
-                    
-        //         }
-        //     }
-        // }
+        
     }
     pub fn check_possible_moves(&self, crd: &Crd) -> bool {
         
@@ -124,9 +109,7 @@ impl Context {
 
     pub fn en_passant(&mut self, crd: &Crd) -> bool {
         if let Some(player_crd) = &self.player_crd {
-            // if !self.board.is_player_piece(player_crd, self.player) {
-            //     return false;
-            // }
+            
             if let Some(player) = self.board.get_player_piece(player_crd, self.player) {
 
                 if !player.is_pawn() {
@@ -153,27 +136,6 @@ impl Context {
         }
 
 
-        // let player = self.get_piece().unwrap();
-        // if !player.is_pawn() {
-        //     return false;
-        // }
-        
-        //let player_crd = self.player_crd.as_ref().unwrap();
-        //let target_crd = crd.as_ref().unwrap();
-        //let direction = target_crd.y() - player_crd.y();
-        // if direction.abs() != 1 {
-        //     return false;
-        // }
-        // let enemy_crd = Crd::create(player_crd.x(), player_crd.y() + direction);
-        // if let Some(enemy) = self.get_piece_by_crd(&enemy_crd) {
-        //     if enemy.is_pawn() {
-        //         if let Some(enemy_crd) = enemy_crd {
-        //             self.board.move_piece(player_crd, target_crd);
-        //             self.board.remove_piece(&enemy_crd);
-        //             return true;
-        //         }
-        //     }
-        // }
         
         false
     }
@@ -247,10 +209,6 @@ impl Context {
         self.change_possible_moves();
     }
 
-    // pub fn get_moves(&mut self, moves: Vec<Crd>) {
-    //     self.moves = moves;
-    // }
-
     pub fn get_board(&self) -> &Board {
         &self.board
     }
@@ -263,13 +221,6 @@ impl Context {
         self.player_crd = Some(crd);
     }
 
-    // pub fn get_move_crd(&self) -> &Crd {
-    //     &self.move_crd
-    // }
-
-    // pub fn set_move_crd(&mut self, crd: Option<Crd>) {
-    //     self.move_crd = crd;
-    // }
 
     pub fn get_piece(&self) -> Option<&Box<Piece>> {
         match &self.get_player_crd() {
@@ -278,9 +229,7 @@ impl Context {
         }
     }
 
-    // pub fn get_piece_mut(&mut self) -> Option<&mut Box<Piece>> {
-    //     self.board.get_piece_mut(&self.get_player_crd())
-    // }
+    
 
     pub fn get_piece_by_crd(&self, crd: &Crd) -> Option<&Box<Piece>> {
         self.board.get_piece(crd)
@@ -294,9 +243,6 @@ impl Context {
         self.moves.clear();
     }
 
-    // pub fn set_moves(&mut self, moves: HashSet<Crd>) {
-    //     self.moves = moves;
-    // }
 
     pub fn is_player_piece(&self, crd: &Crd) -> bool {
         self.board.is_player_piece(crd, self.player)
