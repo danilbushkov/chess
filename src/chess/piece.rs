@@ -147,6 +147,12 @@ impl Piece {
             _ => false,
         }
     }
+    pub fn is_queen(&self) -> bool {
+        match self {
+            Piece::Queen(_) => true,
+            _ => false,
+        }
+    }
 
     pub fn is_queen_or_bishop_or_rook(&self) -> bool {
         match self {

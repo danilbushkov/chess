@@ -117,6 +117,8 @@ impl Board {
                 self.pieces[(t.get_player()/2)].remove(location);
                 self.pieces[(t.get_player()/2)].insert(target.clone());
                 self.set(target.get_tuple(), tmp);
+                self.pawn_transformation(target);
+
                 return true;
             }
             
@@ -169,7 +171,7 @@ impl Board {
 
 
     fn pawn_transformation(&mut self, location: &Crd) {
-        if location.x() != 0 || location.x() != 7 {
+        if location.x() != 0 && location.x() != 7 {
             return;
         }
         if let Some(piece) = self.get_piece(location) {
