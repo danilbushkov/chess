@@ -4,6 +4,7 @@ use std::collections::HashSet;
 use crate::chess::piece::Piece;
 use crate::chess::crd::Crd;
 use crate::chess::piece::trajectory::Piece as Trajectory;
+use crate::chess::piece::queen::Queen;
 
 pub struct Board {
     board: Vec<Vec<Option<Box<Piece>>>>,
@@ -151,16 +152,43 @@ impl Board {
                 let mut tmp = self.take(location.get_tuple());
                 if let Some(p) = &mut tmp {
                     p.change_first_move();
+                    
                     self.set(target.get_tuple(), tmp);
-                
+                    self.pawn_transformation(target);
+
                     self.pieces[enemy/2].remove(target);
                     self.pieces[player/2].remove(location);
                     self.pieces[player/2].insert(target.clone());
+                    
                     return true;
                 }
             }  
         }
         false
+    }
+
+
+    fn pawn_transformation(&mut self, location: &Crd) {
+        if location.x() != 0 || location.x() != 7 {
+            return;
+        }
+        if let Some(piece) = self.get_piece(location) {
+            if piece.is_pawn() {
+                if (location.x() == 0 && piece.get_player() == 1) ||
+                   (location.x() == 7 && piece.get_player() == 2) {
+
+                    let pawn = self.take(location.get_tuple());
+
+                    if let Some(p) = pawn {
+                        self.set(location.get_tuple(), Some(
+                            Box::new(
+                                Piece::Queen(Queen::create(p.get_player()))
+                            )
+                        ));
+                    }
+                }
+            }
+        } 
     }
     
 

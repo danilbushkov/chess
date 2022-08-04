@@ -16,8 +16,8 @@ mod bishop;
 mod king;
 mod knight;
 mod pawn;
-mod queen;
 mod rook;
+pub mod queen;
 pub mod trajectory;
 
 use std::collections::HashSet;
